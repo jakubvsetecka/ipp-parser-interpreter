@@ -1,2 +1,0 @@
-# ipp_uloha1
-
