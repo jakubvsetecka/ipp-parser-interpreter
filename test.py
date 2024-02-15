@@ -1,23 +1,30 @@
-import xml.etree.ElementTree as ET
-import xml.dom.minidom
-import sys
+import re
 
-# Create your XML tree using ElementTree
-root = ET.Element("root")
-root.set("language", "IPPcode24")
-child = ET.SubElement(root, "instruction")
-child.set("order", "1")
-child.set("opcode", "MOVE")
-child = ET.SubElement(child, "arg1")
-child.set("type", "int")
-child.text = "32"
+def parse_line(text, *group_types):
+    # Define patterns for each group type
+    patterns = {
+        'var': r'(\$\w+)',  # Example: $variableName
+        'symb': r'(\d+|\$\w+|\w+)',  # Example: 123, $variable, or symbolName
+        'label': r'(@\w+)',  # Example: @labelName
+    }
+    
+    # Construct the regex pattern based on the specified group types
+    regex_parts = [patterns[group_type] for group_type in group_types if group_type in patterns]
+    pattern = '-'.join(regex_parts)
+    
+    # Search for the pattern in the text
+    match = re.search(pattern, text)
+    if match:
+        return match.groups()  # Returns a tuple of all captured groups
+    else:
+        return None
 
-# Convert the ElementTree to a string
-xml_str = ET.tostring(root, encoding='utf-8', method='xml')
+# Example usage
+text = "@labelName-$variableName-123"
+print(parse_line(text, 'label', 'var', 'symb'))  # Example: Matching label, var, and symb
 
-# Use minidom to pretty print
-dom = xml.dom.minidom.parseString(xml_str)
-pretty_xml_as_string = dom.toprettyxml(indent="  ", encoding="UTF-8").decode('utf-8')
+text = "$variableName-456"
+print(parse_line(text, 'var', 'symb'))  # Example: Matching var and symb
 
-# Print the pretty-printed XML with the declaration to stdout
-print(pretty_xml_as_string, file=sys.stdout)
+text = "123-@labelName"
+print(parse_line(text, 'symb', 'label'))  # Example: Matching symb and label
