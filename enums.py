@@ -1,13 +1,13 @@
 from enum import Enum
 
 class ArgumentType(Enum):
-    INT = r'int@\d+'
-    BOOL = r'(bool@true|false)'
-    STRING = r'^string@[^#\s\\]*'
-    TYPE = r'(string|bool|int)'
-    NIL = r'nil@nil'
-    LABEL = r'(\w+)'
-    VAR = r'(GF|TF|LF)@(\w+)'
+    INT = r'(?P<INT>int@\d+)'
+    BOOL = r'(?P<BOOL>bool@true|false)'
+    STRING = r'(?P<STRING>^string@[^#\s\\]*)'
+    TYPE = r'(?P<TYPE>string|bool|int)'
+    NIL = r'(?P<NIL>nil@nil)'
+    LABEL = r'(?P<LABEL>\w+)'
+    VAR = r'(?P<VAR>(GF|TF|LF)@\w+)'
 
 class ArgumentInInst(Enum):
     VAR = ArgumentType.VAR.value

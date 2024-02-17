@@ -8,17 +8,13 @@ from enums import InstructionFormat
 #================================================================================================
 
 class Argument:
-    def __init__(self, type, value):
+    def __init__(self, type, value, subtype=None):
         self.type = type
         self.value = value
+        self.subtype = subtype  # New attribute to store the specific subtype
 
     def __str__(self):
-        # Returns a readable string representation of an Argument object
-        return f"Argument(Type: {self.type}, Value: {self.value})"
-
-    def to_xml_element(self, xml_generator, arg_index):
-        # Convert this argument to an XML element and attach it to the current instruction element
-        return xml_generator.add_argument(self, arg_index)
+        return f"Argument(Type: {self.type}, Value: {self.value}, Subtype: {self.subtype})"
 
 #================================================================================================
 
@@ -41,15 +37,24 @@ class Instruction:
 class ArgumentParser:
     @staticmethod
     def parse(arg, expected_type_enum):
-            # Use expected_type_enum to retrieve the regex pattern for validation
-            pattern = re.compile(expected_type_enum.value)
-            if pattern.match(arg):
-                # Argument matches expected type
-                return Argument(expected_type_enum.name, arg)
-            else:
-                # Handle invalid argument type
-                print(f"Invalid argument type: {arg}, {expected_type_enum} was excepted", file=sys.stderr)
-                raise ValueError("Invalid argument type")
+        # Use expected_type_enum to retrieve the regex pattern for validation
+        pattern = re.compile(expected_type_enum.value, re.VERBOSE)
+        match = pattern.match(arg)  # Correctly call the match method with arg
+        found_arg = None
+        if match:
+            # Find which group was matched
+            for subtype, value in match.groupdict().items():
+                if value is not None:
+                    # Return the first matched subtype with its value
+                    if found_arg is None:
+                        found_arg = Argument(expected_type_enum.name, value, subtype)
+                    else:
+                        raise ValueError(f"Argument {arg} matches multiple types")
+        # Handle the case where no match is found
+        if found_arg is None:
+            raise ValueError(f"Argument {arg} does not match the expected type {expected_type_enum.name}")
+       
+        return found_arg  # Or raise an error, depending on your error handling strategy
 
 #================================================================================================
 
