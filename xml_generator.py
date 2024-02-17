@@ -1,28 +1,28 @@
 import xml.etree.ElementTree as ET
 from xml.dom.minidom import parseString
+from parse_utils import Argument, Instruction  # Ensure parse_utils.py is correctly located
+import re
 
 class XMLGenerator:
     def __init__(self):
         self.root = ET.Element("program", language="IPPcode24")
-        self.instruction_count = 0  # Initialize instruction counter
+        self.instruction_count = 0
     
-    def add_instruction(self, opcode, *args):
-        return #TODO
-        self.instruction_count += 1  # Increment instruction counter
+    def add_instruction(self, instruction):
+        self.instruction_count += 1
         order = self.instruction_count
-        instruction = ET.SubElement(self.root, "instruction", order=str(order), opcode=opcode.upper())
-        for i, (arg_type, arg_value) in enumerate(args, start=1):
-            arg_elem = ET.SubElement(instruction, f"arg{i}", type=arg_type)
-            arg_elem.text = self._format_value(arg_type, arg_value)
+
+        # Create instruction element
+        instr_elem = ET.SubElement(self.root, "instruction", order=str(order), opcode=instruction.opcode)
+        
+        # Add args elements
+        for i, arg in enumerate(instruction.args, start=1):
+            arg_elem = ET.SubElement(instr_elem, f"arg{i}", type=arg.subtype.lower())
+            arg_elem.text = self._format_value(arg.value)
     
-    def _format_value(self, arg_type, arg_value):
-        return
-        if arg_type == ArgumentInInst.VAR.value:
-            return arg_value.upper()  # Memory frame in uppercase
-        elif arg_type == "string":
-            return arg_value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-        # Add more formatting rules as needed
-        return arg_value
+    def _format_value(self, value):  # Add 'self' parameter
+        pattern = r'^(string@|int@|bool@|nil@)'
+        return re.sub(pattern, '', value)  # Correctly apply the substitution
     
     def generate_xml(self):
         raw_xml = ET.tostring(self.root, 'utf-8')

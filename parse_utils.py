@@ -1,7 +1,5 @@
 import re
 import sys
-from xml.dom.minidom import parseString
-from xml_generator import XMLGenerator
 from enums import InstructionFormat
 
 
