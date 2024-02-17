@@ -25,9 +25,17 @@ class XMLGenerator:
         return re.sub(pattern, '', value)  # Correctly apply the substitution
     
     def generate_xml(self):
-        raw_xml = ET.tostring(self.root, 'utf-8')
-        parsed_xml = parseString(raw_xml)
-        return parsed_xml.toprettyxml(indent="  ")
+        # Generate a bytes object containing the XML with the specified encoding and XML declaration
+        raw_xml = ET.tostring(self.root, encoding='utf-8', xml_declaration=True)
+        
+        # Convert bytes to string for parseString
+        raw_xml_str = raw_xml.decode('utf-8')
+        
+        # Use minidom to prettify the XML
+        parsed_xml = parseString(raw_xml_str)
+        
+        # Return the pretty-printed XML as a string, specifying the encoding explicitly in toprettyxml if needed
+        return parsed_xml.toprettyxml(indent="  ", encoding="UTF-8").decode('utf-8')
 
     def get_instruction_count(self):
         return self.instruction_count
