@@ -1,8 +1,7 @@
 import sys
 import io
-import re
-from parse_utils import InstructionParser
-from xml_generator import XMLGenerator
+from modules.parse_utils import InstructionParser
+from modules.xml_generator import XMLGenerator
 
 # RegexGolf
 
@@ -28,7 +27,7 @@ def main():
 
     xml_generator = XMLGenerator()
     instruction_parser = InstructionParser(xml_generator)
-    
+
     try:
         instruction_parser.parse_code(code)
     except Exception as e:

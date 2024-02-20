@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 from xml.dom.minidom import parseString
-from parse_utils import Argument, Instruction  # Ensure parse_utils.py is correctly located
+from modules.parse_utils import Argument, Instruction  # Ensure parse_utils.py is correctly located
 import re
 
 class XMLGenerator:

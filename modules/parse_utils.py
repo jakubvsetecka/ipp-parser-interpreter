@@ -1,6 +1,6 @@
 import re
 import sys
-from enums import InstructionFormat
+from modules.enums import InstructionFormat
 
 
 #================================================================================================
