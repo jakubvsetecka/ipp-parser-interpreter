@@ -18,11 +18,7 @@ class XMLGenerator:
         # Add args elements
         for i, arg in enumerate(instruction.args, start=1):
             arg_elem = ET.SubElement(instr_elem, f"arg{i}", type=arg.subtype.lower())
-            arg_elem.text = self._format_value(arg.value)
-    
-    def _format_value(self, value):  # Add 'self' parameter
-        pattern = r'^(string@|int@|bool@|nil@)'
-        return re.sub(pattern, '', value)  # Correctly apply the substitution
+            arg_elem.text = arg.value
     
     def generate_xml(self):
         # Generate a bytes object containing the XML with the specified encoding and XML declaration
@@ -36,6 +32,3 @@ class XMLGenerator:
         
         # Return the pretty-printed XML as a string, specifying the encoding explicitly in toprettyxml if needed
         return parsed_xml.toprettyxml(indent="  ", encoding="UTF-8").decode('utf-8')
-
-    def get_instruction_count(self):
-        return self.instruction_count

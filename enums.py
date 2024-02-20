@@ -1,11 +1,11 @@
 from enum import Enum
 
 class ArgumentType(Enum):
-    INT = r'(?P<INT>int@\d+)'
-    BOOL = r'(?P<BOOL>bool@true|false)'
-    STRING = r'(?P<STRING>^string@[^#\s\\]*)'
+    INT = r'(?:int@)(?P<INT>\d+)'
+    BOOL = r'^(?:bool@)(?P<BOOL>true|false)'
+    STRING = r'^(?:string@)(?P<STRING>[^#\s\\]*)'
     TYPE = r'(?P<TYPE>string|bool|int)'
-    NIL = r'(?P<NIL>nil@nil)'
+    NIL = r'^(nil@)(?P<NIL>nil)'
     LABEL = r'(?P<LABEL>\w+)'
     VAR = r'(?P<VAR>(GF|TF|LF)@\w+)'
 

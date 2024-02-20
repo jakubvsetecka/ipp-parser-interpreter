@@ -70,7 +70,10 @@ class InstructionParser:
         args = parts[1:]
         
         # Retrieve the expected argument types for this instruction
-        expected_arg_types = InstructionFormat[opcode].value
+        try:
+            expected_arg_types = InstructionFormat[opcode].value
+        except KeyError:
+            sys.exit(32)
         
         # Parse each argument according to its expected type
         parsed_args = []
@@ -88,7 +91,7 @@ class InstructionParser:
     def clean_code(self, code):
         # Remove comments and empty lines
         def remove_header(code):
-            new_string, number_of_subs_made = re.subn(r'^\.IPPcode24\n', '', code)
+            new_string, number_of_subs_made = re.subn(r'^\.[iI][pP][pP][cC][oO][dD][eE]24\s*\n', '', code)
             if number_of_subs_made == 1:
                 return new_string
             else:
