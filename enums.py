@@ -1,9 +1,9 @@
 from enum import Enum
 
 class ArgumentType(Enum):
-    INT = r'(?:int@)(?P<INT>\d+)'
+    INT = r'(?:int@)(?P<INT>\-?\b(0x[0-9A-Fa-f]+|0o?[0-7]+|[1-9][0-9]*|0)\b\s*$)'
     BOOL = r'^(?:bool@)(?P<BOOL>true|false)'
-    STRING = r'^(?:string@)(?P<STRING>[^#\s\\]*)'
+    STRING = r'^(?:string@)(?P<STRING>(?:\\[0-9]{3}|[^\s#\\])*\s*$)'
     TYPE = r'(?P<TYPE>string|bool|int)'
     NIL = r'^(nil@)(?P<NIL>nil)'
     LABEL = r'(?P<LABEL>\w+)'

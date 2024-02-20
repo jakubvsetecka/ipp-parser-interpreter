@@ -73,8 +73,11 @@ class InstructionParser:
         try:
             expected_arg_types = InstructionFormat[opcode].value
         except KeyError:
-            sys.exit(32)
+            sys.exit(23)
         
+        if len(args) != len(expected_arg_types):
+            sys.exit(23)
+
         # Parse each argument according to its expected type
         parsed_args = []
         for arg, expected_type in zip(args, expected_arg_types):
@@ -83,18 +86,21 @@ class InstructionParser:
         
         # Create an Instruction object and convert it to XML
         instruction = Instruction(opcode, parsed_args)
-        print(instruction)
-        print("\n")
+        #print(instruction)
+        #print("\n")
         instruction.to_xml_element(self.xml_generator)
         pass
 
     def clean_code(self, code):
         # Remove comments and empty lines
         def remove_header(code):
-            new_string, number_of_subs_made = re.subn(r'^\.[iI][pP][pP][cC][oO][dD][eE]24\s*\n', '', code)
+            print(code, file=sys.stderr)
+            new_string, number_of_subs_made = re.subn(r'^\.[iI][pP][pP][cC][oO][dD][eE]24\s*', '', code)
+            print(new_string, number_of_subs_made, file=sys.stderr)
             if number_of_subs_made == 1:
                 return new_string
             else:
+                print("Header not found", file=sys.stderr)
                 sys.exit(21)
 
         def remove_comments(code):
@@ -117,8 +123,11 @@ class InstructionParser:
         # Main entry point for parsing code
         # Iterate through lines and parse each instruction
         code = self.clean_code(code)
+        if code == "":
+            return
 
         lines = code.strip().split("\n")
+
         for line in lines:
             self.parse_line(line.strip())
 

@@ -28,8 +28,12 @@ def main():
 
     xml_generator = XMLGenerator()
     instruction_parser = InstructionParser(xml_generator)
-
-    instruction_parser.parse_code(code)
+    
+    try:
+        instruction_parser.parse_code(code)
+    except Exception as e:
+        print(e, file=sys.stderr)
+        sys.exit(23)
 
     # Generate and print the XML representation
     print(xml_generator.generate_xml())
