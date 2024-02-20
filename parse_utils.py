@@ -94,9 +94,7 @@ class InstructionParser:
     def clean_code(self, code):
         # Remove comments and empty lines
         def remove_header(code):
-            print(code, file=sys.stderr)
             new_string, number_of_subs_made = re.subn(r'^\.[iI][pP][pP][cC][oO][dD][eE]24\s*', '', code)
-            print(new_string, number_of_subs_made, file=sys.stderr)
             if number_of_subs_made == 1:
                 return new_string
             else:
