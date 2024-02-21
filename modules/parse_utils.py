@@ -73,7 +73,7 @@ class InstructionParser:
         try:
             expected_arg_types = InstructionFormat[opcode].value
         except KeyError:
-            sys.exit(23)
+            sys.exit(22)
         
         if len(args) != len(expected_arg_types):
             sys.exit(23)
@@ -94,7 +94,7 @@ class InstructionParser:
     def clean_code(self, code):
         # Remove comments and empty lines
         def remove_header(code):
-            new_string, number_of_subs_made = re.subn(r'^\.[iI][pP][pP][cC][oO][dD][eE]24\s*', '', code)
+            new_string, number_of_subs_made = re.subn(r'^\s*\.[iI][pP][pP][cC][oO][dD][eE]24\s*', '', code)
             if number_of_subs_made == 1:
                 return new_string
             else:

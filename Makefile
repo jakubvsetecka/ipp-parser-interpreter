@@ -24,7 +24,8 @@ is_it_ok: zip
 
 # Target to run supplementary tests
 test:
-	cd ./supplementary-tests/parse && ./test.sh ./../../parse.py
+	./tests/tomovi-ipp-parser-testy/run.sh
+	cd ./tests/supplementary-tests/parse && NO_EXIT=1 ./test.sh ./../../../parse.py
 
 # Clean target to remove generated files
 clean:
