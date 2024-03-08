@@ -51,8 +51,8 @@ class ArgumentParser:
         # Handle the case where no match is found
         if found_arg is None:
             raise ValueError(f"Argument {arg} does not match the expected type {expected_type_enum.name}")
-       
-        return found_arg  # Or raise an error, depending on your error handling strategy
+
+        return found_arg
 
 #================================================================================================
 
@@ -68,13 +68,13 @@ class InstructionParser:
         parts = line.split()
         opcode = parts[0].upper()
         args = parts[1:]
-        
+
         # Retrieve the expected argument types for this instruction
         try:
             expected_arg_types = InstructionFormat[opcode].value
         except KeyError:
             sys.exit(22)
-        
+
         if len(args) != len(expected_arg_types):
             sys.exit(23)
 
@@ -83,7 +83,7 @@ class InstructionParser:
         for arg, expected_type in zip(args, expected_arg_types):
             parsed_arg = ArgumentParser.parse(arg, expected_type)
             parsed_args.append(parsed_arg)
-        
+
         # Create an Instruction object and convert it to XML
         instruction = Instruction(opcode, parsed_args)
         #print(instruction)
@@ -110,11 +110,11 @@ class InstructionParser:
             # Remove trailing whitespace at the end of the string, if present, without removing the final newline
             cleaned_code = re.sub(r'\n\s*$', '\n', cleaned_code)
             return cleaned_code
-        
+
         code = remove_comments(code)
         code = remove_empty_lines(code)
         code = remove_header(code)
-        
+
         return code
 
     def parse_code(self, code):

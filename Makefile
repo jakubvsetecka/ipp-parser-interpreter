@@ -2,6 +2,8 @@
 ZIP_FILE=xvsete00.zip
 TEST_DIR=temp_test_dir
 FILES_TO_ZIP=parse.py modules readme1.md
+DOC_DIR=./doc
+DOC_FILE=readme1
 
 # Default target
 all: zip test
@@ -27,9 +29,18 @@ test:
 	./tests/tomovi-ipp-parser-testy/run.sh
 	cd ./tests/supplementary-tests/parse && NO_EXIT=1 ./test.sh ./../../../parse.py
 
+# Target to create a PDF from the LaTeX document
+pdf:
+	# Change directory to the document folder and compile the LaTeX document into a PDF
+	cd $(DOC_DIR); pdflatex $(DOC_FILE).tex
+	cd $(DOC_DIR);rm -f ./*.aux ./*.log ./*.out
+	# Move the generated PDF back to the current directory
+	mv $(DOC_DIR)/$(DOC_FILE).pdf .
+
 # Clean target to remove generated files
 clean:
 	rm -f $(ZIP_FILE)
 	rm -rf $(TEST_DIR)
+	rm -f $(PDF_FILE)
 
-.PHONY: all zip is_it_ok test clean
+.PHONY: all zip is_it_ok test pdf clean
