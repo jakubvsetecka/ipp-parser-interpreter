@@ -86,8 +86,6 @@ class InstructionParser:
 
         # Create an Instruction object and convert it to XML
         instruction = Instruction(opcode, parsed_args)
-        #print(instruction)
-        #print("\n")
         instruction.to_xml_element(self.xml_generator)
         pass
 

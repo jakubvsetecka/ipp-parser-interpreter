@@ -33,6 +33,7 @@ test:
 pdf:
 	# Change directory to the document folder and compile the LaTeX document into a PDF
 	cd $(DOC_DIR); pdflatex $(DOC_FILE).tex
+	cd $(DOC_DIR); pdflatex $(DOC_FILE).tex
 	cd $(DOC_DIR);rm -f ./*.aux ./*.log ./*.out
 	# Move the generated PDF back to the current directory
 	mv $(DOC_DIR)/$(DOC_FILE).pdf .

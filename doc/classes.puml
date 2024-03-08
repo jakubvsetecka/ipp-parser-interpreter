@@ -1,0 +1,46 @@
+@startuml
+
+class XMLGenerator {
+    - root
+    - instruction_count : int
+    + __init__()
+    + add_instruction(instruction : Instruction)
+    + generate_xml() : string
+}
+
+class Argument {
+    - type
+    - value
+    - subtype
+    + __init__(type, value, subtype)
+    + __str__() : string
+}
+
+class Instruction {
+    - opcode
+    - args : list[Argument]
+    + __init__(opcode, args : list)
+    + __str__() : string
+    + to_xml_element(xml_generator : XMLGenerator)
+}
+
+class ArgumentParser {
+    + parse(arg : string, expected_type_enum : ArgumentInInst) : Argument
+}
+
+class InstructionParser {
+    - xml_generator : XMLGenerator
+    + __init__(xml_generator : XMLGenerator)
+    + parse_line(line : string)
+    + clean_code(code : string) : string
+    + parse_code(code : string)
+}
+
+XMLGenerator "1" -- "0..*" Instruction: converts
+Instruction "1" -- "1..*" Argument: has
+InstructionParser ..> XMLGenerator: uses
+InstructionParser ..> ArgumentParser: uses
+InstructionParser "1" -- "0..*" Instruction: creates
+ArgumentParser "1" -- "0..*" Argument: creates
+
+@enduml
