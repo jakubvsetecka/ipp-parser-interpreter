@@ -1,7 +1,7 @@
 # Define variables for convenience
 ZIP_FILE=xvsete00.zip
 TEST_DIR=temp_test_dir
-FILES_TO_ZIP=parse.py modules readme1.md
+FILES_TO_ZIP=parse.py modules readme1.pdf
 DOC_DIR=./doc
 DOC_FILE=readme1
 
@@ -10,6 +10,7 @@ all: zip test
 
 # Target to zip the required files
 zip:
+	rm -rf modules/__pycache__
 	zip -r $(ZIP_FILE) $(FILES_TO_ZIP)
 
 # Target to test the zip file using is_it_ok.sh
