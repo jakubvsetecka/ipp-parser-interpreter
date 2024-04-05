@@ -15,12 +15,7 @@ class Interpreter extends AbstractInterpreter
         //$this->stderr->writeString("stderr");
         //$this->stdout->writeString("stdout");
         $dom = $this->source->getDOMDocument();
-        $instructionGenerator = new InstructionGenerator($dom);
-
-        foreach ($instructionGenerator->run() as $instruction) {
-            // Process the instruction
-            fwrite(STDOUT, json_encode($instruction, JSON_PRETTY_PRINT) . PHP_EOL);
-        }
+        $instructionGenerator = new XMLParser($dom);
         return 0;
     }
 }

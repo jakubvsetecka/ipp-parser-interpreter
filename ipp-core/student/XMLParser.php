@@ -5,7 +5,7 @@ namespace IPP\Student;
 use DOMDocument;
 use DOMElement;
 
-class InstructionGenerator
+class XMLParser
 {
     private DOMDocument $dom;
 
