@@ -5,11 +5,16 @@ namespace IPP\Student;
 
 abstract class instruction
 {
-    private string $order;
+    private int $order;
     private array $arguments;
 
     abstract public function execute(): void;
 
+    /**
+     * Instruction constructor.
+     * @param int $order
+     * @param array<Argument> $arguments
+     */
     public function __construct(string $order, array $arguments)
     {
         $this->order = $order;

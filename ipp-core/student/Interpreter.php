@@ -15,7 +15,8 @@ class Interpreter extends AbstractInterpreter
         //$this->stderr->writeString("stderr");
         //$this->stdout->writeString("stdout");
         $dom = $this->source->getDOMDocument();
-        $instructionGenerator = new XMLParser($dom);
+        $xml_parser = new XMLParser($dom);
+        $instructions = $xml_parser->run();
         return 0;
     }
 }

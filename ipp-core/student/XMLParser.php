@@ -8,19 +8,20 @@ use DOMElement;
 class XMLParser
 {
     private DOMDocument $dom;
+    private $inst_factory;
 
     public function __construct(DOMDocument $dom)
     {
         $this->dom = $dom;
+        $this->inst_factory = new InstructionFactory();
     }
 
-    /**
-     * @return iterable<array<string|null>>
-     */
-    public function run(): iterable
+    public function run(): array
     {
         // Get all 'instruction' elements
         $instructions = $this->dom->getElementsByTagName('instruction');
+
+        $parsedInstructions = [];
 
         foreach ($instructions as $instruction) {
             // Initialize an associative array to hold the instruction details
@@ -37,7 +38,9 @@ class XMLParser
                 }
             }
 
-            yield $detail;
+            $parsedInstructions[] = $detail;
         }
+
+        return $parsedInstructions;
     }
 }
