@@ -2,5 +2,16 @@
     "files.exclude": {
         "temp": true,
         "tmp": true
-    }
+    },
+    "cSpell.words": [
+        "CREATEFRAME",
+        "DEFVAR",
+        "GETCHAR",
+        "JUMPIFEQ",
+        "JUMPIFNEQ",
+        "POPFRAME",
+        "PUSHFRAME",
+        "PUSHS",
+        "SETCHAR"
+    ]
 }

@@ -11,4 +11,9 @@ class LabelArgument extends Argument
         $regex_pattern = '/^([a-zA-Z]|_|-|\$|&|%|\*|!|\?)([a-zA-Z0-9]|_|-|\$|&|%|\*|!|\?)*$/';
         parent::__construct($value, $regex_pattern);
     }
+
+    public function __toString()
+    {
+        return $this->getValue();
+    }
 }

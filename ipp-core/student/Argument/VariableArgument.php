@@ -20,5 +20,8 @@ class VariableArgument extends Argument
         return $this->frame;
     }
 
-    // Inherits getValue() from Argument
+    public function __toString()
+    {
+        return $this->getValue(); // Assuming getValue() returns a string representation of the value
+    }
 }

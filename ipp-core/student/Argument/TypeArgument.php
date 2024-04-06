@@ -11,4 +11,9 @@ class TypeArgument extends Argument
         $regex_pattern = '/^(int|string|bool)$/';
         parent::__construct($value, $regex_pattern);
     }
+
+    public function __toString()
+    {
+        return $this->getValue();
+    }
 }

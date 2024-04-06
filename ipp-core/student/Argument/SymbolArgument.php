@@ -21,6 +21,11 @@ class SymbolArgument extends Argument
         }
     }
 
+    public function __toString()
+    {
+        return $this->getValue();
+    }
+
     private function isConstant(): bool
     {
         return preg_match('/^(int|string|bool|nil)@(.+)$/', $this->value);
