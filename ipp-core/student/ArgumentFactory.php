@@ -9,228 +9,60 @@ use IPP\Student\Argument\VariableArgument;
 
 class ArgumentFactory
 {
+    private static $map = [
+        'ADD' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'SUB' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'MUL' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'IDIV' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'LT' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'GT' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'EQ' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'AND' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'OR' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'NOT' => [VariableArgument::class, SymbolArgument::class],
+        'INT2CHAR' => [VariableArgument::class, SymbolArgument::class],
+        'STRI2INT' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'READ' => [VariableArgument::class, TypeArgument::class],
+        'WRITE' => [SymbolArgument::class],
+        'CONCAT' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'STRLEN' => [VariableArgument::class, SymbolArgument::class],
+        'GETCHAR' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'SETCHAR' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'TYPE' => [VariableArgument::class, SymbolArgument::class],
+        'LABEL' => [LabelArgument::class],
+        'JUMP' => [LabelArgument::class],
+        'JUMPIFEQ' => [LabelArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'JUMPIFNEQ' => [LabelArgument::class, SymbolArgument::class, SymbolArgument::class],
+        'DPRINT' => [SymbolArgument::class],
+        'BREAK' => [],
+        'CREATEFRAME' => [],
+        'PUSHFRAME' => [],
+        'POPFRAME' => [],
+        'DEFVAR' => [VariableArgument::class],
+        'CALL' => [LabelArgument::class],
+        'RETURN' => [],
+        'PUSHS' => [SymbolArgument::class],
+        'POPS' => [VariableArgument::class],
+    ];
+
     public static function create(string $opcode, array $args): array
     {
-        switch ($opcode) {
-            case 'ADD':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'SUB':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'MUL':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'IDIV':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'LT':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'GT':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'EQ':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'AND':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'OR':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'NOT':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1
-                ];
-            case 'INT2CHAR':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1
-                ];
-            case 'STR2INT':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'READ':
-                $var = new VariableArgument($args[0]);
-                $type = new TypeArgument($args[1]);
-                return [$var, $type];
-            case 'WRITE':
-                $symb = new SymbolArgument($args[0]);
-                return [
-                    'symb' => $symb
-                ];
-            case 'CONCAT':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'STRLEN':
-                $var = new VariableArgument($args[0]);
-                $symb = new SymbolArgument($args[1]);
-                return [
-                    'var' => $var,
-                    'symb' => $symb
-                ];
-            case 'GETCHAR':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'SETCHAR':
-                $var = new VariableArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'var' => $var,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'TYPE':
-                $var = new VariableArgument($args[0]);
-                $symb = new SymbolArgument($args[1]);
-                return [
-                    'var' => $var,
-                    'symb' => $symb
-                ];
-            case 'LABEL':
-                $label = new LabelArgument($args[0]);
-                return [
-                    'label' => $label
-                ];
-            case 'JUMP':
-                $label = new LabelArgument($args[0]);
-                return [
-                    'label' => $label
-                ];
-            case 'JUMPIFEQ':
-                $label = new LabelArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'label' => $label,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'JUMPIFNEQ':
-                $label = new LabelArgument($args[0]);
-                $symb1 = new SymbolArgument($args[1]);
-                $symb2 = new SymbolArgument($args[2]);
-                return [
-                    'label' => $label,
-                    'symb1' => $symb1,
-                    'symb2' => $symb2
-                ];
-            case 'DPRINT':
-                $symb = new SymbolArgument($args[0]);
-                return [
-                    'symb' => $symb
-                ];
-            case 'BREAK':
-                return [];
-            case 'CREATEFRAME':
-                return [];
-            case 'PUSHFRAME':
-                return [];
-            case 'POPFRAME':
-                return [];
-            case 'DEFVAR':
-                $var = new VariableArgument($args[0]);
-                return [
-                    'var' => $var
-                ];
-            case 'CALL':
-                $label = new LabelArgument($args[0]);
-                return [
-                    'label' => $label
-                ];
-            case 'RETURN':
-                return [];
-            case 'PUSHS':
-                $symb = new SymbolArgument($args[0]);
-                return [
-                    'symb' => $symb
-                ];
-            case 'POPS':
-                $var = new VariableArgument($args[0]);
-                return [
-                    'var' => $var
-                ];
-            default:
-                throw new \Exception("Unknown opcode: $opcode");
+        if (!array_key_exists($opcode, self::$map) || !isset(self::$map[$opcode])) {
+            throw new \Exception("Unsupported opcode: $opcode");
         }
+
+        $expectedArgTypes = self::$map[$opcode];
+        $result = [];
+        foreach ($expectedArgTypes as $i => $argType) {
+            if (!class_exists($argType)) {
+                throw new \InvalidArgumentException("Class $argType does not exist for opcode $opcode.");
+            }
+            if (!array_key_exists($i, $args)) {
+                throw new \InvalidArgumentException("Missing argument for $argType in opcode $opcode.");
+            }
+            $result[] = new $argType($args[$i]);
+        }
+
+        return $result;
     }
 }

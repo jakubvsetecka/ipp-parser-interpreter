@@ -2,6 +2,7 @@
 
 namespace IPP\Student;
 
+use IPP\Core\Exception\ParameterException;
 use IPP\Student\Instruction\Arithmetics\ADDInstruction;
 use IPP\Student\Instruction\Arithmetics\SUBInstruction;
 use IPP\Student\Instruction\Arithmetics\MULInstruction;
@@ -36,79 +37,66 @@ use IPP\Student\Instruction\MemoryFrame\RETURNInstruction;
 use IPP\Student\Instruction\DataFrame\PUSHSInstruction;
 use IPP\Student\Instruction\DataFrame\POPSInstruction;
 
+/**
+ * Factory for creating instructions.
+ */
 class InstructionFactory
 {
+    private static $map = [
+        'ADD' => ADDInstruction::class,
+        'SUB' => SUBInstruction::class,
+        'MUL' => MULInstruction::class,
+        'IDIV' => IDIVInstruction::class,
+        'LT' => LTInstruction::class,
+        'GT' => GTInstruction::class,
+        'EQ' => EQInstruction::class,
+        'AND' => ANDInstruction::class,
+        'OR' => ORInstruction::class,
+        'NOT' => NOTInstruction::class,
+        'INT2CHAR' => INT2CHARInstruction::class,
+        'STR2INT' => STR2INTInstruction::class,
+        'READ' => READInstruction::class,
+        'WRITE' => WRITEInstruction::class,
+        'CONCAT' => CONCATInstruction::class,
+        'STRLEN' => STRLENInstruction::class,
+        'GETCHAR' => GETCHARInstruction::class,
+        'SETCHAR' => SETCHARInstruction::class,
+        'TYPE' => TYPEInstruction::class,
+        'LABEL' => LABELInstruction::class,
+        'JUMP' => JUMPInstruction::class,
+        'JUMPIFEQ' => JUMPIFEQInstruction::class,
+        'JUMPIFNEQ' => JUMPIFNEQInstruction::class,
+        'DPRINT' => DPRINTInstruction::class,
+        'BREAK' => BREAKInstruction::class,
+        'CREATEFRAME' => CREATEFRAMEInstruction::class,
+        'PUSHFRAME' => PUSHFRAMEInstruction::class,
+        'POPFRAME' => POPFRAMEInstruction::class,
+        'DEFVAR' => DEFVARInstruction::class,
+        'CALL' => CALLInstruction::class,
+        'RETURN' => RETURNInstruction::class,
+        'PUSHS' => PUSHSInstruction::class,
+        'POPS' => POPSInstruction::class,
+    ];
+
+    /**
+     * Creates an instruction based on the opcode.
+     *
+     * @param int $order
+     * @param string $opcode
+     * @param array $arguments
+     * @return Instruction Returns an instance of Instruction or its subclass based on the opcode.
+     */
     public static function create(int $order, string $opcode, array $arguments): Instruction
     {
-        switch ($opcode) {
-            case 'ADD':
-                return new ADDInstruction($order, $arguments);
-            case 'SUB':
-                return new SUBInstruction($order, $arguments);
-            case 'MUL':
-                return new MULInstruction($order, $arguments);
-            case 'IDIV':
-                return new IDIVInstruction($order, $arguments);
-            case 'LT':
-                return new LTInstruction($order, $arguments);
-            case 'GT':
-                return new GTInstruction($order, $arguments);
-            case 'EQ':
-                return new EQInstruction($order, $arguments);
-            case 'AND':
-                return new ANDInstruction($order, $arguments);
-            case 'OR':
-                return new ORInstruction($order, $arguments);
-            case 'NOT':
-                return new NOTInstruction($order, $arguments);
-            case 'INT2CHAR':
-                return new INT2CHARInstruction($order, $arguments);
-            case 'STR2INT':
-                return new STR2INTInstruction($order, $arguments);
-            case 'READ':
-                return new READInstruction($order, $arguments);
-            case 'WRITE':
-                return new WRITEInstruction($order, $arguments);
-            case 'CONCAT':
-                return new CONCATInstruction($order, $arguments);
-            case 'STRLEN':
-                return new STRLENInstruction($order, $arguments);
-            case 'GETCHAR':
-                return new GETCHARInstruction($order, $arguments);
-            case 'SETCHAR':
-                return new SETCHARInstruction($order, $arguments);
-            case 'TYPE':
-                return new TYPEInstruction($order, $arguments);
-            case 'LABEL':
-                return new LABELInstruction($order, $arguments);
-            case 'JUMP':
-                return new JUMPInstruction($order, $arguments);
-            case 'JUMPIFEQ':
-                return new JUMPIFEQInstruction($order, $arguments);
-            case 'JUMPIFNEQ':
-                return new JUMPIFNEQInstruction($order, $arguments);
-            case 'DPRINT':
-                return new DPRINTInstruction($order, $arguments);
-            case 'BREAK':
-                return new BREAKInstruction($order, $arguments);
-            case 'CREATEFRAME':
-                return new CREATEFRAMEInstruction($order, $arguments);
-            case 'PUSHFRAME':
-                return new PUSHFRAMEInstruction($order, $arguments);
-            case 'POPFRAME':
-                return new POPFRAMEInstruction($order, $arguments);
-            case 'DEFVAR':
-                return new DEFVARInstruction($order, $arguments);
-            case 'CALL':
-                return new CALLInstruction($order, $arguments);
-            case 'RETURN':
-                return new RETURNInstruction($order, $arguments);
-            case 'PUSHS':
-                return new PUSHSInstruction($order, $arguments);
-            case 'POPS':
-                return new POPSInstruction($order, $arguments);
-            default:
-                throw new \Exception("Unknown opcode: $opcode");
+        if (!array_key_exists($opcode, self::$map)) {
+            throw new ParameterException("Unsupported opcode: $opcode");
         }
+
+        $className = self::$map[$opcode];
+
+        $instruction = new $className($order, ...$arguments);
+        assert($instruction instanceof Instruction); // phpain
+
+        return $instruction;
     }
 }
