@@ -3,6 +3,7 @@
 namespace IPP\Student\Argument;
 
 use IPP\Student\Argument;
+use IPP\Student\Argument\RegexPattern\RegexPattern;
 
 class VariableArgument extends Argument
 {
@@ -10,9 +11,11 @@ class VariableArgument extends Argument
 
     public function __construct($value)
     {
-        $regex_pattern = '/^(LF|TF|GF)@([a-zA-Z_\-$&%*!?][a-zA-Z0-9_\-$&%*!?]*)$/';
-        parent::__construct($value, $regex_pattern);
-        $this->frame = substr($value, 0, 2);
+        if (RegexPattern::Variable->match($value) === false)
+            throw new \InvalidArgumentException(sprintf('Invalid variable name: %s', $value));
+
+        $this->frame = RegexPattern::BeforeAt->getValue($value);
+        $this->value = RegexPattern::AfterAt->getValue($value);
     }
 
     public function getFrame()

@@ -3,13 +3,17 @@
 namespace IPP\Student\Argument;
 
 use IPP\Student\Argument;
+use IPP\Student\Argument\RegexPattern\RegexPattern;
 
 class TypeArgument extends Argument
 {
     public function __construct($value)
     {
-        $regex_pattern = '/^(int|string|bool)$/';
-        parent::__construct($value, $regex_pattern);
+        if (RegexPattern::Type->match($value) === false) {
+            throw new \InvalidArgumentException("Invalid type argument");
+        }
+
+        $this->value = $value;
     }
 
     public function __toString()
