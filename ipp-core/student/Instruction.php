@@ -2,19 +2,13 @@
 
 namespace IPP\Student;
 
-
-abstract class instruction
+abstract class Instruction
 {
     private int $order;
     private array $arguments;
 
     abstract public function execute(): void;
 
-    /**
-     * Instruction constructor.
-     * @param int $order
-     * @param array<Argument> $arguments
-     */
     public function __construct(string $order, array $arguments)
     {
         $this->order = $order;
@@ -29,5 +23,18 @@ abstract class instruction
     public function getArguments(): array
     {
         return $this->arguments;
+    }
+
+    /**
+     * Prints the instruction details.
+     */
+    public function print(): void
+    {
+        echo "Order: {$this->order}\n";
+        echo "Arguments:\n";
+        foreach ($this->arguments as $argument) {
+            // Assuming each argument has a method `getValue` for its string representation
+            echo " - " . $argument->getValue() . "\n";
+        }
     }
 }

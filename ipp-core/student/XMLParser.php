@@ -9,14 +9,24 @@ class XMLParser
 {
     private DOMDocument $dom;
     private $inst_factory;
+    private $arg_factory;
 
     public function __construct(DOMDocument $dom)
     {
         $this->dom = $dom;
         $this->inst_factory = new InstructionFactory();
+        $this->arg_factory = new ArgumentFactory();
     }
 
     public function run(): array
+    {
+        $instructions = $this->getInstructions();
+        $instructions = $this->sortInstructions($instructions);
+
+        return $instructions;
+    }
+
+    private function getInstructions(): array
     {
         // Get all 'instruction' elements
         $instructions = $this->dom->getElementsByTagName('instruction');
@@ -24,23 +34,37 @@ class XMLParser
         $parsedInstructions = [];
 
         foreach ($instructions as $instruction) {
-            // Initialize an associative array to hold the instruction details
-            $detail = [];
-
             // Directly access child nodes by tag name
-            $detail['order'] = $instruction->getAttribute('order');
-            $detail['opcode'] = $instruction->getAttribute('opcode');
+            $order = $instruction->getAttribute('order');
+            $opcode = $instruction->getAttribute('opcode');
 
-            $arguments = $instruction->childNodes;
-            foreach ($arguments as $argument) {
-                if ($argument instanceof DOMElement) {
-                    $detail[$argument->tagName] = $argument->nodeValue;
+            // Initialize an array to hold the argument strings
+            $argumentStrings = [];
+            foreach ($instruction->childNodes as $childNode) {
+                // Check if the node is a DOMElement and has textContent
+                if ($childNode instanceof \DOMElement) {
+                    $argumentStrings[] = $childNode->textContent;
                 }
             }
 
-            $parsedInstructions[] = $detail;
+            // Pass the array of strings to your factory method
+            $arguments = $this->arg_factory->create($opcode, $argumentStrings);
+
+            $parsedInstructions[] = $this->inst_factory->create($order, $opcode, $arguments);
         }
 
         return $parsedInstructions;
+    }
+
+    private function sortInstructions(array $instructions): array
+    {
+        usort($instructions, function ($a, $b) {
+            if ($a->getOrder() === $b->getOrder()) {
+                throw new \Exception("Duplicate order value: {$a->getOrder()}");
+            }
+            return $a->getOrder() <=> $b->getOrder();
+        });
+
+        return $instructions;
     }
 }

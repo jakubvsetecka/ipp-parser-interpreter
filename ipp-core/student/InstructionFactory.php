@@ -27,6 +27,14 @@ use IPP\Student\Instruction\Control\JUMPIFEQInstruction;
 use IPP\Student\Instruction\Control\JUMPIFNEQInstruction;
 use IPP\Student\Instruction\Debug\DPRINTInstruction;
 use IPP\Student\Instruction\Debug\BREAKInstruction;
+use IPP\Student\Instruction\MemoryFrame\CREATEFRAMEInstruction;
+use IPP\Student\Instruction\MemoryFrame\PUSHFRAMEInstruction;
+use IPP\Student\Instruction\MemoryFrame\POPFRAMEInstruction;
+use IPP\Student\Instruction\MemoryFrame\DEFVARInstruction;
+use IPP\Student\Instruction\MemoryFrame\CALLInstruction;
+use IPP\Student\Instruction\MemoryFrame\RETURNInstruction;
+use IPP\Student\Instruction\DataFrame\PUSHSInstruction;
+use IPP\Student\Instruction\DataFrame\POPSInstruction;
 
 class InstructionFactory
 {
@@ -83,6 +91,22 @@ class InstructionFactory
                 return new DPRINTInstruction($order, $arguments);
             case 'BREAK':
                 return new BREAKInstruction($order, $arguments);
+            case 'CREATEFRAME':
+                return new CREATEFRAMEInstruction($order, $arguments);
+            case 'PUSHFRAME':
+                return new PUSHFRAMEInstruction($order, $arguments);
+            case 'POPFRAME':
+                return new POPFRAMEInstruction($order, $arguments);
+            case 'DEFVAR':
+                return new DEFVARInstruction($order, $arguments);
+            case 'CALL':
+                return new CALLInstruction($order, $arguments);
+            case 'RETURN':
+                return new RETURNInstruction($order, $arguments);
+            case 'PUSHS':
+                return new PUSHSInstruction($order, $arguments);
+            case 'POPS':
+                return new POPSInstruction($order, $arguments);
             default:
                 throw new \Exception("Unknown opcode: $opcode");
         }
