@@ -2,9 +2,6 @@
 
 namespace IPP\Student;
 
-use ReflectionClass;
-use ReflectionProperty;
-
 abstract class Instruction
 {
     private int $order;
@@ -26,27 +23,74 @@ abstract class Instruction
      */
     public function print()
     {
-        $className = get_class($this);
-        // Replace backslashes with forward slashes and use basename to get the last part
-        $simpleClassName = basename(str_replace('\\', '/', $className));
-
-        // Optionally, remove "Instruction" from the end if it's always there
-        $simpleClassName = str_replace('Instruction', '', $simpleClassName);
-
+        $simpleClassName = $this->getSimpleName(get_class($this));
         echo "Instruction(" . $this->order . "): " . $simpleClassName . "\n";
 
-        echo "Arguments:\n";
         $reflectionClass = new \ReflectionClass($this);
-        #if no arguments:
-        if (count($reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE)) == 0) {
-            echo "\t" . "---\n";
-        }
-        foreach ($reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE) as $property) {
-            $property->setAccessible(true); // Make private property accessible
-            # tabulation first
-            echo "\t" . $property->getName() . ": " . $property->getValue($this) . "\n";
+        $properties = $reflectionClass->getProperties();
+
+        foreach ($properties as $property) {
+            if (!$property->isPublic()) {
+                $property->setAccessible(true); // Make non-public properties accessible
+            }
+
+            $value = $property->getValue($this);
+            $propertyName = $property->getName();
+            $propertyTypeName = $this->getPropertyTypeName($property);
+            $simplePropertyTypeName = $this->getSimpleName($propertyTypeName);
+
+            echo "\t" . $propertyName . " (" . $simplePropertyTypeName . "):\n";
+
+            // If the property is an object, iterate its attributes
+            if (is_object($value)) {
+                $this->printObjectAttributes($value);
+            } else {
+                // For non-object values, just print the value
+                echo "\t\tValue: " . $value . "\n";
+            }
         }
 
         echo "\n";
+    }
+
+    private function getPropertyTypeName(\ReflectionProperty $property): string
+    {
+        $type = $property->getType();
+        if (!$type) {
+            return 'mixed';
+        }
+
+        $typeName = $type instanceof \ReflectionNamedType ? $type->getName() : 'mixed';
+        return $typeName;
+    }
+
+    private function printObjectAttributes($object): void
+    {
+        $reflectionClass = new \ReflectionClass($object);
+        $attributes = $reflectionClass->getProperties();
+        foreach ($attributes as $attribute) {
+            if (!$attribute->isPublic()) {
+                $attribute->setAccessible(true);
+            }
+
+            $attrName = $attribute->getName();
+            $attrValue = $attribute->getValue($object);
+            $attrType = $this->getPropertyTypeName($attribute);
+
+            if (is_bool($attrValue)) {
+                $attrValue = $attrValue ? 'true' : 'false';
+            } else if ($attrValue === null) {
+                $attrValue = 'null';
+            }
+
+            echo "\t\t" . $attrName . " (" . $attrType . "): " . $attrValue . "\n";
+        }
+    }
+
+    private function getSimpleName(string $name): string
+    {
+        $simpleName = basename(str_replace('\\', '/', $name));
+        // Use regex to remove everything from the last uppercase letter onwards
+        return preg_replace('/[A-Z][^A-Z]*$/', '', $simpleName);
     }
 }
