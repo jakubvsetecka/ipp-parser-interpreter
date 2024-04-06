@@ -20,5 +20,10 @@ class MOVEInstruction extends Instruction
 
     public function execute(): void
     {
+        global $FRAME_MODEL;
+
+        $frame = $this->destination->getFrame();
+        $name = $this->destination->getValue();
+        $value = $this->source->getValue();
     }
 }

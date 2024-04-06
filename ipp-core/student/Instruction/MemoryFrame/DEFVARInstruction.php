@@ -17,5 +17,11 @@ class DEFVARInstruction extends Instruction
 
     public function execute(): void
     {
+        global $FRAME_MODEL;
+
+        $frame = $this->variable->getFrame();
+        $name = $this->variable->getValue();
+
+        $FRAME_MODEL->addVariable($frame, $name);
     }
 }
