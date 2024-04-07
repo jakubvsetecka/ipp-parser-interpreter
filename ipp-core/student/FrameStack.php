@@ -13,6 +13,15 @@ class FrameStack
         $this->stack = [];
     }
 
+    public function __toString(): string
+    {
+        $output = '';
+        foreach ($this->stack as $frame) {
+            $output .= sprintf("%s\n", $frame);
+        }
+        return $output;
+    }
+
     public function push(Frame $frame): void
     {
         array_push($this->stack, $frame);

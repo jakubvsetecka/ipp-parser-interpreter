@@ -13,6 +13,15 @@ class Frame
         $this->frame = [];
     }
 
+    public function __toString(): string
+    {
+        $output = '';
+        foreach ($this->frame as $variable) {
+            $output .= sprintf("%s\n", $variable);
+        }
+        return $output;
+    }
+
     public function addVariable(Variable $variable): void
     {
         $name = $variable->getName();

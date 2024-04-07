@@ -5,7 +5,7 @@ namespace IPP\Student;
 class Variable
 {
     private string $name;
-    private string $value;
+    private ?string $value;
     private bool $defined;
 
     public function __construct(string $name, string $value = null)
@@ -13,6 +13,11 @@ class Variable
         $this->name = $name;
         $this->value = $value;
         $this->defined = $value !== null;
+    }
+
+    public function __toString()
+    {
+        return sprintf("%s %s", $this->name, $this->value);
     }
 
     public function setValue(int $value): void

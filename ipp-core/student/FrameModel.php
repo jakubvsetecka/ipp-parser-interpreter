@@ -9,7 +9,7 @@ use IPP\Student\Frame;
 class FrameModel
 {
     private Frame $GF;
-    private Frame $TF;
+    private ?Frame $TF;
     private FrameStack $LF;
 
     public function __construct()
@@ -17,6 +17,14 @@ class FrameModel
         $this->GF = new Frame();
         $this->LF = new FrameStack();
         $this->TF = null;
+    }
+
+    public function __toString()
+    {
+        if ($this->TF === null) {
+            return sprintf("GF:\n%s\nLF:\n%s\n", $this->GF, $this->LF);
+        }
+        return sprintf("GF:\n%s\nLF:\n%s\nTF:\n%s\n", $this->GF, $this->LF, $this->TF);
     }
 
     public function createFrame(): void
