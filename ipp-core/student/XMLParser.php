@@ -11,10 +11,10 @@ class XMLParser
     private $inst_factory;
     private $arg_factory;
 
-    public function __construct(DOMDocument $dom)
+    public function __construct(DOMDocument $dom, ServiceLocator $service_locator)
     {
         $this->dom = $dom;
-        $this->inst_factory = new InstructionFactory();
+        $this->inst_factory = new InstructionFactory($service_locator);
         $this->arg_factory = new ArgumentFactory();
     }
 

@@ -8,11 +8,15 @@ class Scheduler
     private ProgramCounter $program_counter;
     private CallStack $call_stack;
 
-    public function __construct(array $instructions)
+    public function __construct()
     {
-        $this->instructions = $instructions;
         $this->program_counter = new ProgramCounter();
         $this->call_stack = new CallStack();
+    }
+
+    public function setInstructions(array $instructions): void
+    {
+        $this->instructions = $instructions;
     }
 
     public function getInstructions(): array

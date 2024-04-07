@@ -36,47 +36,55 @@ use IPP\Student\Instruction\MemoryFrame\CALLInstruction;
 use IPP\Student\Instruction\MemoryFrame\RETURNInstruction;
 use IPP\Student\Instruction\DataFrame\PUSHSInstruction;
 use IPP\Student\Instruction\DataFrame\POPSInstruction;
+use IPP\Student\Instruction\MemoryFrame\MOVEInstruction;
 
 /**
  * Factory for creating instructions.
  */
 class InstructionFactory
 {
+    private ServiceLocator $serviceLocator;
     private static $map = [
-        'ADD' => ADDInstruction::class,
-        'SUB' => SUBInstruction::class,
-        'MUL' => MULInstruction::class,
-        'IDIV' => IDIVInstruction::class,
-        'LT' => LTInstruction::class,
-        'GT' => GTInstruction::class,
-        'EQ' => EQInstruction::class,
-        'AND' => ANDInstruction::class,
-        'OR' => ORInstruction::class,
-        'NOT' => NOTInstruction::class,
-        'INT2CHAR' => INT2CHARInstruction::class,
-        'STR2INT' => STR2INTInstruction::class,
-        'READ' => READInstruction::class,
-        'WRITE' => WRITEInstruction::class,
-        'CONCAT' => CONCATInstruction::class,
-        'STRLEN' => STRLENInstruction::class,
-        'GETCHAR' => GETCHARInstruction::class,
-        'SETCHAR' => SETCHARInstruction::class,
-        'TYPE' => TYPEInstruction::class,
-        'LABEL' => LABELInstruction::class,
-        'JUMP' => JUMPInstruction::class,
-        'JUMPIFEQ' => JUMPIFEQInstruction::class,
-        'JUMPIFNEQ' => JUMPIFNEQInstruction::class,
-        'DPRINT' => DPRINTInstruction::class,
-        'BREAK' => BREAKInstruction::class,
-        'CREATEFRAME' => CREATEFRAMEInstruction::class,
-        'PUSHFRAME' => PUSHFRAMEInstruction::class,
-        'POPFRAME' => POPFRAMEInstruction::class,
-        'DEFVAR' => DEFVARInstruction::class,
-        'CALL' => CALLInstruction::class,
-        'RETURN' => RETURNInstruction::class,
-        'PUSHS' => PUSHSInstruction::class,
-        'POPS' => POPSInstruction::class,
+        'ADD' => ['class' => ADDInstruction::class, 'services' => ['frame_model']],
+        'SUB' => ['class' => SUBInstruction::class, 'services' => ['frame_model']],
+        'MUL' => ['class' => MULInstruction::class, 'services' => ['frame_model']],
+        'IDIV' => ['class' => IDIVInstruction::class, 'services' => ['frame_model']],
+        'LT' => ['class' => LTInstruction::class, 'services' => ['frame_model']],
+        'GT' => ['class' => GTInstruction::class, 'services' => ['frame_model']],
+        'EQ' => ['class' => EQInstruction::class, 'services' => ['frame_model']],
+        'AND' => ['class' => ANDInstruction::class, 'services' => ['frame_model']],
+        'OR' => ['class' => ORInstruction::class, 'services' => ['frame_model']],
+        'NOT' => ['class' => NOTInstruction::class, 'services' => ['frame_model']],
+        'INT2CHAR' => ['class' => INT2CHARInstruction::class, 'services' => ['frame_model']],
+        'STR2INT' => ['class' => STR2INTInstruction::class, 'services' => ['frame_model']],
+        'READ' => ['class' => READInstruction::class, 'services' => ['frame_model']],
+        'WRITE' => ['class' => WRITEInstruction::class, 'services' => ['frame_model']],
+        'CONCAT' => ['class' => CONCATInstruction::class, 'services' => ['frame_model']],
+        'STRLEN' => ['class' => STRLENInstruction::class, 'services' => ['frame_model']],
+        'GETCHAR' => ['class' => GETCHARInstruction::class, 'services' => ['frame_model']],
+        'SETCHAR' => ['class' => SETCHARInstruction::class, 'services' => ['frame_model']],
+        'TYPE' => ['class' => TYPEInstruction::class, 'services' => ['frame_model']],
+        'LABEL' => ['class' => LABELInstruction::class, 'services' => ['scheduler']],
+        'JUMP' => ['class' => JUMPInstruction::class, 'services' => ['scheduler']],
+        'JUMPIFEQ' => ['class' => JUMPIFEQInstruction::class, 'services' => ['scheduler', 'frame_model']],
+        'JUMPIFNEQ' => ['class' => JUMPIFNEQInstruction::class, 'services' => ['scheduler', 'frame_model']],
+        'DPRINT' => ['class' => DPRINTInstruction::class, 'services' => ['frame_model']],
+        'BREAK' => ['class' => BREAKInstruction::class],
+        'MOVE' => ['class' => MOVEInstruction::class, 'services' => ['frame_model']],
+        'CREATEFRAME' => ['class' => CREATEFRAMEInstruction::class, 'services' => ['frame_model']],
+        'PUSHFRAME' => ['class' => PUSHFRAMEInstruction::class, 'services' => ['frame_model']],
+        'POPFRAME' => ['class' => POPFRAMEInstruction::class, 'services' => ['frame_model']],
+        'DEFVAR' => ['class' => DEFVARInstruction::class, 'services' => ['frame_model']],
+        'CALL' => ['class' => CALLInstruction::class, 'services' => ['scheduler']],
+        'RETURN' => ['class' => RETURNInstruction::class, 'services' => ['scheduler']],
+        'PUSHS' => ['class' => PUSHSInstruction::class, 'services' => ['data_stack', 'frame_model']],
+        'POPS' => ['class' => POPSInstruction::class, 'services' => ['data_stack', 'frame_model']],
     ];
+
+    public function __construct(ServiceLocator $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+    }
 
     /**
      * Creates an instruction based on the opcode.
@@ -86,16 +94,27 @@ class InstructionFactory
      * @param array $arguments
      * @return Instruction Returns an instance of Instruction or its subclass based on the opcode.
      */
-    public static function create(int $order, string $opcode, array $arguments): Instruction
+    public function create(int $order, string $opcode, array $arguments): Instruction
     {
         if (!array_key_exists($opcode, self::$map)) {
             throw new ParameterException("Unsupported opcode: $opcode");
         }
 
-        $className = self::$map[$opcode];
+        $config = self::$map[$opcode];
+        $className = $config['class'];
 
-        $instruction = new $className($order, ...$arguments);
-        assert($instruction instanceof Instruction); // phpain
+        $services = [];
+        if (isset($config['services'])) {
+            // Fetch each service and add it to the services array
+            foreach ($config['services'] as $serviceType) {
+                $services[] = $this->serviceLocator->get($serviceType);
+            }
+        }
+
+        // Use the ... operator to pass $services as individual arguments
+        $instruction = new $className($order, ...$arguments, ...$services);
+
+        assert($instruction instanceof Instruction);
 
         return $instruction;
     }
