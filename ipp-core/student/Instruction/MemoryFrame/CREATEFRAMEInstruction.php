@@ -9,7 +9,7 @@ class CREATEFRAMEInstruction extends Instruction
 {
     private FrameModel $frameModel;
 
-    public function __construct(FrameModel $frameModel, int $order)
+    public function __construct(int $order, FrameModel $frameModel)
     {
         parent::__construct($order);
         $this->frameModel = $frameModel;

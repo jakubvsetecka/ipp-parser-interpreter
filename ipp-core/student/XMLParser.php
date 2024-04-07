@@ -8,8 +8,8 @@ use DOMElement;
 class XMLParser
 {
     private DOMDocument $dom;
-    private $inst_factory;
-    private $arg_factory;
+    private InstructionFactory $inst_factory;
+    private ArgumentFactory $arg_factory;
 
     public function __construct(DOMDocument $dom, ServiceLocator $service_locator)
     {
@@ -39,16 +39,15 @@ class XMLParser
             $opcode = $instruction->getAttribute('opcode');
 
             // Initialize an array to hold the argument strings
-            $argumentStrings = [];
+            $arguments = [];
             foreach ($instruction->childNodes as $childNode) {
                 // Check if the node is a DOMElement and has textContent
                 if ($childNode instanceof \DOMElement) {
-                    $argumentStrings[] = $childNode->textContent;
+                    $type = $childNode->getAttribute('type');
+                    $value = $childNode->textContent;
+                    $arguments[] = $this->arg_factory->create($type, $value);
                 }
             }
-
-            // Pass the array of strings to your factory method
-            $arguments = $this->arg_factory->create($opcode, $argumentStrings);
 
             $parsedInstructions[] = $this->inst_factory->create($order, $opcode, $arguments);
         }

@@ -3,13 +3,14 @@
 namespace IPP\Student\Instruction\Debug;
 
 use IPP\Student\Instruction;
-use IPP\Student\Argument\SymbolArgument;
+use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Argument\VariableArgument;
 
 class DPRINTInstruction extends Instruction
 {
-    private SymbolArgument $source;
+    private ConstantArgument|VariableArgument $source;
 
-    public function __construct(int $order, SymbolArgument $source)
+    public function __construct(int $order, ConstantArgument|VariableArgument $source)
     {
         parent::__construct($order);
         $this->source = $source;

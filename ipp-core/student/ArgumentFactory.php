@@ -2,67 +2,59 @@
 
 namespace IPP\Student;
 
+use IPP\Student\Argument\ConstantArgument;
 use IPP\Student\Argument\LabelArgument;
-use IPP\Student\Argument\SymbolArgument;
 use IPP\Student\Argument\TypeArgument;
 use IPP\Student\Argument\VariableArgument;
 
 class ArgumentFactory
 {
     private static $map = [
-        'ADD' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'SUB' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'MUL' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'IDIV' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'LT' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'GT' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'EQ' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'AND' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'OR' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'NOT' => [VariableArgument::class, SymbolArgument::class],
-        'INT2CHAR' => [VariableArgument::class, SymbolArgument::class],
-        'STRI2INT' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'READ' => [VariableArgument::class, TypeArgument::class],
-        'WRITE' => [SymbolArgument::class],
-        'CONCAT' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'STRLEN' => [VariableArgument::class, SymbolArgument::class],
-        'GETCHAR' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'SETCHAR' => [VariableArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'TYPE' => [VariableArgument::class, SymbolArgument::class],
-        'LABEL' => [LabelArgument::class],
-        'JUMP' => [LabelArgument::class],
-        'JUMPIFEQ' => [LabelArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'JUMPIFNEQ' => [LabelArgument::class, SymbolArgument::class, SymbolArgument::class],
-        'DPRINT' => [SymbolArgument::class],
-        'BREAK' => [],
-        'CREATEFRAME' => [],
-        'PUSHFRAME' => [],
-        'POPFRAME' => [],
-        'DEFVAR' => [VariableArgument::class],
-        'CALL' => [LabelArgument::class],
-        'RETURN' => [],
-        'PUSHS' => [SymbolArgument::class],
-        'POPS' => [VariableArgument::class],
+        'string' => ['pattern' => '/^.+$/', 'cast' => ConstantArgument::class],
+        'int' => ['pattern' => '/^.+$/', 'cast' => ConstantArgument::class],
+        'bool' => ['pattern' => '/^.+$/', 'cast' => ConstantArgument::class],
+        'nil' => ['pattern' => '/^.+$/', 'cast' => ConstantArgument::class],
+        'label' => ['pattern' => '/^.+$/', 'cast' => LabelArgument::class],
+        'type' => ['pattern' => '/^.+$/', 'cast' => TypeArgument::class],
+        'var' => ['pattern' => '/^.+$/', 'cast' => VariableArgument::class],
     ];
 
-    public static function create(string $opcode, array $args): array
+    public static function create(string $type, string $value): Argument
     {
-        if (!array_key_exists($opcode, self::$map) || !isset(self::$map[$opcode])) {
-            throw new \Exception("Unsupported opcode: $opcode");
+        if (!array_key_exists($type, self::$map) || !isset(self::$map[$type])) {
+            throw new \Exception("Unsupported type: $type");
         }
 
-        $expectedArgTypes = self::$map[$opcode];
-        $result = [];
-        foreach ($expectedArgTypes as $i => $argType) {
-            if (!class_exists($argType)) {
-                throw new \InvalidArgumentException("Class $argType does not exist for opcode $opcode.");
-            }
-            if (!array_key_exists($i, $args)) {
-                throw new \InvalidArgumentException("Missing argument for $argType in opcode $opcode.");
-            }
-            $result[] = new $argType($args[$i]);
+        $typeInfo = self::$map[$type];
+        // Match regex
+        if (preg_match($typeInfo['pattern'], $value) === 0) {
+            throw new \Exception("Invalid value: $value");
         }
 
-        return $result;
+        // Convert the string to the appropriate type
+        $convertedValue = self::convertToProperType($type, $value);
+
+        // Use the converted value to instantiate the Argument
+        $argument = new $typeInfo['cast']($convertedValue);
+
+        return $argument;
+    }
+
+
+    public static function convertToProperType(string $type, string $value)
+    {
+        switch ($type) {
+            case 'int':
+                return (int)$value;
+            case 'bool':
+                // This uses filter_var to convert to boolean. True values are "1", "true", "on", and "yes". Everything else is false.
+                return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
+            case 'string':
+                return $value;
+            case 'nil':
+                return null;
+            default:
+                return $value;
+        }
     }
 }

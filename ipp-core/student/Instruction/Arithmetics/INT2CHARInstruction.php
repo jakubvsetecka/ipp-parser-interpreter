@@ -4,14 +4,14 @@ namespace IPP\Student\Instruction\Arithmetics;
 
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
-use IPP\Student\Argument\SymbolArgument;
+use IPP\Student\Argument\ConstantArgument;
 
 class INT2CHARInstruction extends Instruction
 {
     private VariableArgument $destination;
-    private SymbolArgument $source;
+    private ConstantArgument|VariableArgument $source;
 
-    public function __construct(int $order, VariableArgument $destination, SymbolArgument $source)
+    public function __construct(int $order, VariableArgument $destination, ConstantArgument|VariableArgument $source)
     {
         parent::__construct($order);
         $this->destination = $destination;

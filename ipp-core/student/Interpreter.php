@@ -2,6 +2,7 @@
 
 namespace IPP\Student;
 
+use Exception;
 use IPP\Core\AbstractInterpreter;
 use IPP\Core\Exception\NotImplementedException;
 
@@ -9,26 +10,39 @@ class Interpreter extends AbstractInterpreter
 {
     public function execute(): int
     {
-        // TODO: Start your code here
-        $service_locator = new ServiceLocator();
-        $frame_model = new FrameModel();
-        $data_stack = new DataStack();
-        $scheduler = new Scheduler();
+        try {
 
-        $service_locator->register('frame_model', $frame_model);
-        $service_locator->register('data_stack', $data_stack);
-        $service_locator->register('scheduler', $scheduler);
+            // TODO: Start your code here
+            $service_locator = new ServiceLocator();
+            $frame_model = new FrameModel();
+            $data_stack = new DataStack();
+            $scheduler = new Scheduler();
 
-        $dom = $this->source->getDOMDocument();
-        $xml_parser = new XMLParser($dom, $service_locator);
-        $instructions = $xml_parser->run();
+            $service_locator->register('frame_model', $frame_model);
+            $service_locator->register('data_stack', $data_stack);
+            $service_locator->register('scheduler', $scheduler);
+            $service_locator->register('stdout', $this->stdout);
 
-        $scheduler->setInstructions($instructions);
+            echo "Interpreter is running\n";
 
-        while ($instruction = $scheduler->getNextInstruction()) {
-            $instruction->execute();
+            $dom = $this->source->getDOMDocument();
+            $xml_parser = new XMLParser($dom, $service_locator);
+            $instructions = $xml_parser->run();
+
+            echo "Instructions parsed\n";
+
+            $scheduler->setInstructions($instructions);
+
+            while ($instruction = $scheduler->getNextInstruction()) {
+                $instruction->print();
+                $instruction->execute();
+            }
+
+            return 0;
+        } catch (Exception $e) {
+            echo "Exception:";
+            echo $e->getMessage();
+            return 99;
         }
-
-        return 0;
     }
 }

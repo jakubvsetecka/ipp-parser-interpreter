@@ -3,7 +3,6 @@
 namespace IPP\Student\Argument;
 
 use IPP\Student\Argument;
-use IPP\Student\Argument\RegexPattern\RegexPattern;
 
 class VariableArgument extends Argument
 {
@@ -11,20 +10,17 @@ class VariableArgument extends Argument
 
     public function __construct($value)
     {
-        if (RegexPattern::Variable->match($value) === false)
-            throw new \InvalidArgumentException(sprintf('Invalid variable name: %s', $value));
+        $this->frame = substr($value, 0, 2);
+        $this->value = substr($value, 3);
+    }
 
-        $this->frame = RegexPattern::BeforeAt->getValue($value);
-        $this->value = RegexPattern::AfterAt->getValue($value);
+    public function __toString()
+    {
+        return $this->getValue();
     }
 
     public function getFrame()
     {
         return $this->frame;
-    }
-
-    public function __toString()
-    {
-        return $this->getValue(); // Assuming getValue() returns a string representation of the value
     }
 }

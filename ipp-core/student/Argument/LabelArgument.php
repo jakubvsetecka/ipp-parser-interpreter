@@ -9,10 +9,6 @@ class LabelArgument extends Argument
 {
     public function __construct($value)
     {
-        if (RegexPattern::Label->match($value) === false) {
-            throw new \InvalidArgumentException("Invalid label argument");
-        }
-
         $this->value = $value;
     }
 
