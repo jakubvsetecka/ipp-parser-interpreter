@@ -37,6 +37,7 @@ use IPP\Student\Instruction\MemoryFrame\RETURNInstruction;
 use IPP\Student\Instruction\DataFrame\PUSHSInstruction;
 use IPP\Student\Instruction\DataFrame\POPSInstruction;
 use IPP\Student\Instruction\MemoryFrame\MOVEInstruction;
+use IPP\Student\Instruction\Control\EXITInstruction;
 
 /**
  * Factory for creating instructions.
@@ -64,12 +65,12 @@ class InstructionFactory
         'GETCHAR' => ['class' => GETCHARInstruction::class, 'services' => ['frame_model']],
         'SETCHAR' => ['class' => SETCHARInstruction::class, 'services' => ['frame_model']],
         'TYPE' => ['class' => TYPEInstruction::class, 'services' => ['frame_model']],
-        'LABEL' => ['class' => LABELInstruction::class, 'services' => ['scheduler']],
+        'LABEL' => ['class' => LABELInstruction::class, 'services' => []],
         'JUMP' => ['class' => JUMPInstruction::class, 'services' => ['scheduler']],
         'JUMPIFEQ' => ['class' => JUMPIFEQInstruction::class, 'services' => ['scheduler', 'frame_model']],
         'JUMPIFNEQ' => ['class' => JUMPIFNEQInstruction::class, 'services' => ['scheduler', 'frame_model']],
-        'DPRINT' => ['class' => DPRINTInstruction::class, 'services' => ['frame_model']],
-        'BREAK' => ['class' => BREAKInstruction::class],
+        'DPRINT' => ['class' => DPRINTInstruction::class, 'services' => ['frame_model', 'stderr']],
+        'BREAK' => ['class' => BREAKInstruction::class, 'services' => []],
         'MOVE' => ['class' => MOVEInstruction::class, 'services' => ['frame_model']],
         'CREATEFRAME' => ['class' => CREATEFRAMEInstruction::class, 'services' => ['frame_model']],
         'PUSHFRAME' => ['class' => PUSHFRAMEInstruction::class, 'services' => ['frame_model']],
@@ -79,6 +80,7 @@ class InstructionFactory
         'RETURN' => ['class' => RETURNInstruction::class, 'services' => ['scheduler']],
         'PUSHS' => ['class' => PUSHSInstruction::class, 'services' => ['data_stack', 'frame_model']],
         'POPS' => ['class' => POPSInstruction::class, 'services' => ['data_stack', 'frame_model']],
+        'EXIT' => ['class' => EXITInstruction::class, 'services' => ['scheduler']],
     ];
 
     public function __construct(ServiceLocator $serviceLocator)

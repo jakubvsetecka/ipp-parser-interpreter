@@ -37,6 +37,7 @@ class XMLParser
             // Directly access child nodes by tag name
             $order = $instruction->getAttribute('order');
             $opcode = $instruction->getAttribute('opcode');
+            $opcode = strtoupper($opcode);
 
             // Initialize an array to hold the argument strings
             $arguments = [];

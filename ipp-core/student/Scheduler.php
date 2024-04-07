@@ -7,11 +7,22 @@ class Scheduler
     private array $instructions = [];
     private ProgramCounter $program_counter;
     private CallStack $call_stack;
+    private bool $return = false;
+    private int $exit_code = 0;
 
     public function __construct()
     {
         $this->program_counter = new ProgramCounter();
         $this->call_stack = new CallStack();
+    }
+
+    public function run(): int // Return type is int
+    {
+        while ($this->return === false && $instruction = $this->getNextInstruction()) {
+            $instruction->execute();
+        }
+
+        return $this->exit_code; // Or return appropriate exit code
     }
 
     public function setInstructions(array $instructions): void

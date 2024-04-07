@@ -4,7 +4,7 @@ namespace IPP\Student;
 
 abstract class Instruction
 {
-    private int $order;
+    protected int $order;
 
     abstract public function execute(): void;
 

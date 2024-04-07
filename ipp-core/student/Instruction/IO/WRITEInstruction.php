@@ -12,6 +12,7 @@ use IPP\Student\FrameModel;
 class WRITEInstruction extends Instruction
 {
     private ConstantArgument|VariableArgument $source;
+
     private FrameModel $frameModel;
     private OutputWriter $stdout;
 
@@ -28,7 +29,10 @@ class WRITEInstruction extends Instruction
         if ($this->source instanceof ConstantArgument) {
             $this->stdout->writeString($this->source->getValue());
         } else {
-            $this->frameModel->getVariable($this->source->getFrame(), $this->source->getValue());
+            $frame = $this->source->getFrame();
+            $name = $this->source->getValue();
+            $variable = $this->frameModel->getVariable($frame, $name);
+            $this->stdout->writeString($variable->getValue());
         }
     }
 }

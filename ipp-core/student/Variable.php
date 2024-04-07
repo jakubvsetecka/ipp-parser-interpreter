@@ -20,13 +20,13 @@ class Variable
         return sprintf("%s %s", $this->name, $this->value);
     }
 
-    public function setValue(int $value): void
+    public function setValue($value): void
     {
         $this->value = $value;
         $this->defined = true;
     }
 
-    public function getValue(): int
+    public function getValue(): string
     {
         return $this->value;
     }
