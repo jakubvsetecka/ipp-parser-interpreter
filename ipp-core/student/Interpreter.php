@@ -35,6 +35,8 @@ class Interpreter extends AbstractInterpreter
 
             return $exit_code;
         } catch (Exception $e) {
+            // echo $e->getMessage();
+            // echo $e->getTraceAsString();
             throw $e;
         }
     }

@@ -4,19 +4,15 @@ namespace IPP\Student\Instruction\Control;
 
 use IPP\Student\Instruction;
 use IPP\Student\Argument\LabelArgument;
-use IPP\Student\Scheduler;
-use IPP\Student\Exception\SemanticException;
 
 class LABELInstruction extends Instruction
 {
     private LabelArgument $label;
-    private Scheduler $scheduler;
 
-    public function __construct(int $order, LabelArgument $label, Scheduler $scheduler)
+    public function __construct(int $order, LabelArgument $label)
     {
         $this->order = $order;
         $this->label = $label;
-        $this->scheduler = $scheduler;
     }
 
     public function execute(): void
@@ -40,13 +36,6 @@ class LABELInstruction extends Instruction
         // For the LABELs we see,
         // They might not do much,
         // But they're important to me.
-        $callStack = $this->scheduler->getCallStack();
-
-        if ($callStack->containsLabel($this->label->getValue())) {
-            throw new SemanticException('Duplicate label');
-        } else {
-            $callStack->addLabel($this->label->getValue(), $this->order);
-        }
     }
 
     public function getLabel(): string

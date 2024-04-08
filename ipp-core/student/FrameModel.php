@@ -28,11 +28,6 @@ class FrameModel
         return sprintf("GF:\n%s\nLF:\n%s\nTF:\n%s\n", $this->GF, $this->LF, $this->TF);
     }
 
-    public function print(): void
-    {
-        echo $this->__toString();
-    }
-
     public function createFrame(): void
     {
         $this->TF = new Frame();

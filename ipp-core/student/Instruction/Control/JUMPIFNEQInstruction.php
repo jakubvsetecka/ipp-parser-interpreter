@@ -39,7 +39,7 @@ class JUMPIFNEQInstruction extends Instruction
         } else {
             $name = $this->source1->getValue();
             $frame = $this->source1->getFrame();
-            $variable = $this->frame_model->getVariable($name, $frame);
+            $variable = $this->frame_model->getVariable($frame, $name);
             $value1 = $variable->getValue();
         }
 
@@ -48,7 +48,7 @@ class JUMPIFNEQInstruction extends Instruction
         } else {
             $name = $this->source2->getValue();
             $frame = $this->source2->getFrame();
-            $variable = $this->frame_model->getVariable($name, $frame);
+            $variable = $this->frame_model->getVariable($frame, $name);
             $value2 = $variable->getValue();
         }
 

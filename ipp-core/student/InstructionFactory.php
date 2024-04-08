@@ -66,7 +66,7 @@ class InstructionFactory
         'GETCHAR' => ['class' => GETCHARInstruction::class, 'services' => ['frame_model']],
         'SETCHAR' => ['class' => SETCHARInstruction::class, 'services' => ['frame_model']],
         'TYPE' => ['class' => TYPEInstruction::class, 'services' => ['frame_model']],
-        'LABEL' => ['class' => LABELInstruction::class, 'services' => ['scheduler']],
+        'LABEL' => ['class' => LABELInstruction::class, 'services' => []],
         'JUMP' => ['class' => JUMPInstruction::class, 'services' => ['scheduler']],
         'JUMPIFEQ' => ['class' => JUMPIFEQInstruction::class, 'services' => ['scheduler', 'frame_model']],
         'JUMPIFNEQ' => ['class' => JUMPIFNEQInstruction::class, 'services' => ['scheduler', 'frame_model']],

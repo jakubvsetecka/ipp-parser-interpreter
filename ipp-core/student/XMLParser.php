@@ -5,6 +5,7 @@ namespace IPP\Student;
 use DOMDocument;
 use DOMElement;
 use IPP\Student\Exception\XMLStructureException;
+use IPP\Student\Instruction\Control\LABELInstruction;
 
 class XMLParser
 {
@@ -67,6 +68,14 @@ class XMLParser
 
             if (in_array($instruction->getOrder(), $this->orders)) {
                 throw new XMLStructureException('Order must be unique');
+            }
+
+            if ($instruction instanceof LABELInstruction) {
+                $label = $instruction->getLabel();
+                if (in_array($label, $this->labels)) {
+                    throw new XMLStructureException('Label: ' . $label . ' is not unique');
+                }
+                $this->labels[] = $label;
             }
 
             $this->orders[] = $instruction->getOrder();

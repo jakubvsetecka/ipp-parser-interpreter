@@ -12,7 +12,7 @@ class ArgumentFactory
 {
     private static $map = [
         'string' => [
-            'pattern' => '/^(?:[^\\\\#\s]|\\\\[0-9]{3})+$/', // Matches string constants with the described constraints
+            'pattern' => '/^(?:[^\\\\#\s]|\\\\[0-9]{3})*$/', // Matches string constants with the described constraints
             'cast' => ConstantArgument::class
         ],
         'int' => [
