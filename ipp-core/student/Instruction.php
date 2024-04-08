@@ -2,6 +2,8 @@
 
 namespace IPP\Student;
 
+use IPP\Core\Interface\OutputWriter;
+
 abstract class Instruction
 {
     protected int $order;
@@ -21,10 +23,10 @@ abstract class Instruction
     /**
      * Prints the instruction details.
      */
-    public function print()
+    public function print(OutputWriter $out)
     {
         $simpleClassName = $this->getSimpleName(get_class($this));
-        echo "Instruction(" . $this->order . "): " . $simpleClassName . "\n";
+        $out->writeString($simpleClassName . "(" . $this->order . ")" . ":\n");
 
         $reflectionClass = new \ReflectionClass($this);
         $properties = $reflectionClass->getProperties();
@@ -34,23 +36,28 @@ abstract class Instruction
                 $property->setAccessible(true); // Make non-public properties accessible
             }
 
-            $value = $property->getValue($this);
             $propertyName = $property->getName();
+
+            if ($propertyName === 'frameModel' || $propertyName === 'scheduler' || $propertyName === 'stderr' || $propertyName === 'stdout' || $propertyName === 'stdin' || $propertyName === 'programCounter' || $propertyName === 'callStack' || $propertyName === 'dataStack') {
+                continue;
+            }
+
+            $value = $property->getValue($this);
             $propertyTypeName = $this->getPropertyTypeName($property);
             $simplePropertyTypeName = $this->getSimpleName($propertyTypeName);
 
-            echo "\t" . $propertyName . " (" . $simplePropertyTypeName . "):\n";
+            $out->writeString("\t" . $propertyName . " (" . $simplePropertyTypeName . "):\n");
 
             // If the property is an object, iterate its attributes
             if (is_object($value)) {
-                $this->printObjectAttributes($value);
+                $this->printObjectAttributes($value, $out);
             } else {
                 // For non-object values, just print the value
-                echo "\t\tValue: " . $value . "\n";
+                $out->writeString("\t\tValue: " . $value . "\n");
             }
         }
 
-        echo "\n";
+        $out->writeString("\n");
     }
 
     private function getPropertyTypeName(\ReflectionProperty $property): string
@@ -64,7 +71,7 @@ abstract class Instruction
         return $typeName;
     }
 
-    private function printObjectAttributes($object): void
+    private function printObjectAttributes($object, OutputWriter $out): void
     {
         $reflectionClass = new \ReflectionClass($object);
         $attributes = $reflectionClass->getProperties();
@@ -83,7 +90,7 @@ abstract class Instruction
                 $attrValue = 'null';
             }
 
-            echo "\t\t" . $attrName . " (" . $attrType . "): " . $attrValue . "\n";
+            $out->writeString("\t\t" . $attrName . " (" . $attrType . "): " . $attrValue . "\n");
         }
     }
 

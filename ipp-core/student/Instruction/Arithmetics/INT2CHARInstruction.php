@@ -35,11 +35,10 @@ class INT2CHARInstruction extends Instruction
             $value = $variable->getValue();
         }
 
-        if (mb_chr($value, $encoding = 'UNICODE') === false) {
+        if (($result = mb_chr($value, $encoding = 'UTF-8')) === false) {
             // TODO: throw exception
             throw new \Exception('Invalid ASCII code');
         }
-        $result = chr($value);
 
         $name = $this->destination->getValue();
         $frame = $this->destination->getFrame();

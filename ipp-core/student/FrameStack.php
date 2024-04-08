@@ -16,6 +16,7 @@ class FrameStack
     public function __toString(): string
     {
         $output = '';
+        $output .= sprintf("Number of frames: %d\n", count($this->stack));
         foreach ($this->stack as $frame) {
             $output .= sprintf("%s\n", $frame);
         }

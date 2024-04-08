@@ -68,11 +68,4 @@ class Scheduler
 
         throw new \Exception("Label $label not found");
     }
-
-    public function print(): void
-    {
-        foreach ($this->instructions as $instruction) {
-            $instruction->print();
-        }
-    }
 }

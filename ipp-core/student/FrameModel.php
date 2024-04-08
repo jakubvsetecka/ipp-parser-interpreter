@@ -22,7 +22,7 @@ class FrameModel
     public function __toString()
     {
         if ($this->TF === null) {
-            return sprintf("GF:\n%s\nLF:\n%s\n", $this->GF, $this->LF);
+            return sprintf("GF:\n%s\nTF:\n%s\nLF:\n%s\n", $this->GF, "Undefined\n", $this->LF);
         }
         return sprintf("GF:\n%s\nLF:\n%s\nTF:\n%s\n", $this->GF, $this->LF, $this->TF);
     }

@@ -70,7 +70,7 @@ class InstructionFactory
         'JUMPIFEQ' => ['class' => JUMPIFEQInstruction::class, 'services' => ['scheduler', 'frame_model']],
         'JUMPIFNEQ' => ['class' => JUMPIFNEQInstruction::class, 'services' => ['scheduler', 'frame_model']],
         'DPRINT' => ['class' => DPRINTInstruction::class, 'services' => ['frame_model', 'stderr']],
-        'BREAK' => ['class' => BREAKInstruction::class, 'services' => []],
+        'BREAK' => ['class' => BREAKInstruction::class, 'services' => ['scheduler', 'stderr', 'frame_model']],
         'MOVE' => ['class' => MOVEInstruction::class, 'services' => ['frame_model']],
         'CREATEFRAME' => ['class' => CREATEFRAMEInstruction::class, 'services' => ['frame_model']],
         'PUSHFRAME' => ['class' => PUSHFRAMEInstruction::class, 'services' => ['frame_model']],
