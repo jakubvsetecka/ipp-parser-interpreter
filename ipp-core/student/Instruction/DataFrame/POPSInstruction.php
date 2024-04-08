@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\DataFrame;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\DataStack;
+use IPP\Student\Exception\MissingValueException;
 use IPP\Student\FrameModel;
 
 class POPSInstruction extends Instruction
@@ -24,6 +25,10 @@ class POPSInstruction extends Instruction
 
     public function execute(): void
     {
+        if ($this->dataStack->isEmpty()) {
+            throw new MissingValueException();
+        }
+
         $value = $this->dataStack->pop();
 
         $name = $this->destination->getValue();

@@ -6,6 +6,7 @@ use IPP\Core\Interface\InputReader;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\TypeArgument;
+use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 
 class READInstruction extends Instruction
@@ -15,6 +16,12 @@ class READInstruction extends Instruction
 
     private FrameModel $frameModel;
     private InputReader $stdin;
+
+    private static $map = [
+        'string' => '/^(?:[^\\\\#\s]|\\\\[0-9]{3})+$/',
+        'int' => '/^[-+]?\d+$/',
+        'bool' => '/^true|false$/',
+    ];
 
     public function __construct(int $order, VariableArgument $destination, TypeArgument $type, FrameModel $frameModel, InputReader $stdin)
     {
@@ -40,7 +47,7 @@ class READInstruction extends Instruction
                 $value = $this->stdin->readString();
                 break;
             default:
-                $value = 'nil'; // TODO: implement nil
+                throw new OperandTypeException("Invalid type: {$this->type->getValue()}");
         }
 
         $this->frameModel->setVariable($this->destination->getFrame(), $this->destination->getValue(), $value);

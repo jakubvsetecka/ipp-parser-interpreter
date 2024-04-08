@@ -2,6 +2,10 @@
 
 namespace IPP\Student;
 
+use IPP\Core\Interface\OutputWriter;
+use IPP\Student\Exception\MissingValueException;
+use IPP\Student\Exception\SemanticException;
+
 class Scheduler
 {
     private array $instructions = [];
@@ -18,11 +22,16 @@ class Scheduler
 
     public function run(): int // Return type is int
     {
-        while ($this->return === false && $instruction = $this->getNextInstruction()) {
+        while ($this->return === false && ($instruction = $this->getNextInstruction()) !== null) {
             $instruction->execute();
         }
 
         return $this->exit_code; // Or return appropriate exit code
+    }
+
+    public function getCallStack(): CallStack
+    {
+        return $this->call_stack;
     }
 
     public function setInstructions(array $instructions): void
@@ -54,6 +63,9 @@ class Scheduler
 
     public function ret(): void
     {
+        if ($this->call_stack->isEmpty()) {
+            throw new MissingValueException("Call stack is empty");
+        }
         $this->program_counter->setCounter($this->call_stack->pop());
     }
 
@@ -66,6 +78,12 @@ class Scheduler
             }
         }
 
-        throw new \Exception("Label $label not found");
+        throw new SemanticException("Label $label not found");
+    }
+
+    public function exit(int $value): void
+    {
+        $this->return = true;
+        $this->exit_code = $value;
     }
 }

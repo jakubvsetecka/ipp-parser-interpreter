@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\Strings;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\StringOperationException;
 use IPP\Student\FrameModel;
 
 class STRLENInstruction extends Instruction
@@ -33,6 +34,10 @@ class STRLENInstruction extends Instruction
             $name = $this->source->getValue();
             $variable = $this->frameModel->getVariable($frame, $name);
             $value = $variable->getValue();
+        }
+
+        if (!is_string($value)) {
+            throw new StringOperationException('Argument must be a string.');
         }
 
         $result = strlen($value);

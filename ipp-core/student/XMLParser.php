@@ -11,6 +11,7 @@ class XMLParser
     private InstructionFactory $inst_factory;
     private ArgumentFactory $arg_factory;
     private array $orders = [];
+    private array $labels = [];
 
     public function __construct(DOMDocument $dom, ServiceLocator $service_locator)
     {
@@ -21,10 +22,20 @@ class XMLParser
 
     public function run(): array
     {
+        $this->validateLanguage();
         $instructions = $this->getInstructions();
         $instructions = $this->sortInstructions($instructions);
 
         return $instructions;
+    }
+
+    private function validateLanguage(): void
+    {
+        $root = $this->dom->documentElement;
+
+        if ($root->getAttribute('language') !== 'IPPcode24') {
+            throw new \Exception('Invalid language');
+        }
     }
 
     private function getInstructions(): array
@@ -54,7 +65,6 @@ class XMLParser
             $instruction = $this->inst_factory->create($order, $opcode, $arguments);
 
             if (in_array($instruction->getOrder(), $this->orders)) {
-                echo "Order must be unique\n";
                 throw new \Exception('Order must be unique');
             }
 

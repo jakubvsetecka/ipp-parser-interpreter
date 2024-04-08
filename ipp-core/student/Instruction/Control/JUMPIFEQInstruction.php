@@ -6,6 +6,7 @@ use IPP\Student\Instruction;
 use IPP\Student\Argument\LabelArgument;
 use IPP\Student\Argument\ConstantArgument;
 use IPP\Student\Argument\VariableArgument;
+use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 use IPP\Student\Scheduler;
 
@@ -49,6 +50,10 @@ class JUMPIFEQInstruction extends Instruction
             $frame = $this->source2->getFrame();
             $variable = $this->frame_model->getVariable($name, $frame);
             $value2 = $variable->getValue();
+        }
+
+        if (gettype($value1) !== gettype($value2) && $value1 !== null && $value2 !== null) {
+            throw new OperandTypeException('Types of values must match');
         }
 
         if ($value1 === $value2) {

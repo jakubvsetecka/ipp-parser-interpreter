@@ -5,6 +5,8 @@ namespace IPP\Student\Instruction\Strings;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\OperandTypeException;
+use IPP\Student\Exception\StringOperationException;
 use IPP\Student\FrameModel;
 
 class GETCHARInstruction extends Instruction
@@ -45,6 +47,18 @@ class GETCHARInstruction extends Instruction
             $name = $this->index->getValue();
             $variable = $this->frameModel->getVariable($frame, $name);
             $indexValue = $variable->getValue();
+        }
+
+        if (!is_string($sourceValue)) {
+            throw new OperandTypeException('Argument must be a string.');
+        }
+
+        if (!is_int($indexValue)) {
+            throw new OperandTypeException('Index must be an integer.');
+        }
+
+        if ($indexValue < 0 || $indexValue >= strlen($sourceValue)) {
+            throw new StringOperationException('Index out of bounds.');
         }
 
         $result = $sourceValue[$indexValue];

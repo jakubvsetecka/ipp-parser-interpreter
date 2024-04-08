@@ -5,6 +5,7 @@ namespace IPP\Student;
 use IPP\Student\Variable;
 use IPP\Student\FrameStack;
 use IPP\Student\Frame;
+use IPP\Student\Exception\FrameException;
 
 class FrameModel
 {
@@ -39,13 +40,20 @@ class FrameModel
 
     public function pushFrame(): void
     {
+        if ($this->TF === null) {
+            throw new FrameException();
+        }
         $this->LF->push($this->TF);
         $this->TF = null;
     }
 
     public function popFrame(): void
     {
-        $this->TF = $this->LF->pop();
+        $frame = $this->LF->pop();
+        if ($frame === null) {
+            throw new FrameException();
+        }
+        $this->TF = $frame;
     }
 
     public function addVariable(string $frame, string $name, string $value = null): void
@@ -89,7 +97,7 @@ class FrameModel
         }
     }
 
-    public function setVariable(string $frame, string $name, int $value): void
+    public function setVariable(string $frame, string $name, string|int|bool|null $value): void
     {
         switch ($frame) {
             case 'GF':

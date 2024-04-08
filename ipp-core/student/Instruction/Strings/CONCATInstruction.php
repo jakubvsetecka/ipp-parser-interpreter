@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\Strings;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 
 class CONCATInstruction extends Instruction
@@ -45,6 +46,10 @@ class CONCATInstruction extends Instruction
             $name = $this->source2->getValue();
             $variable = $this->frameModel->getVariable($frame, $name);
             $value2 = $variable->getValue();
+        }
+
+        if (!is_string($value1) || !is_string($value2)) {
+            throw new OperandTypeException('Both arguments must be strings.');
         }
 
         $result = $value1 . $value2;

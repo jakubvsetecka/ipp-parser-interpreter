@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\Arithmetics;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 
 class NOTInstruction extends Instruction
@@ -33,6 +34,10 @@ class NOTInstruction extends Instruction
             $frame = $this->source->getFrame();
             $variable = $this->frameModel->getVariable($frame, $name);
             $value = $variable->getValue();
+        }
+
+        if (gettype($value) !== 'boolean') {
+            throw new OperandTypeException('Operand must be of the boolean type');
         }
 
         $result = ~$value;

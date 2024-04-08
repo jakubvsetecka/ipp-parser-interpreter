@@ -26,13 +26,31 @@ class WRITEInstruction extends Instruction
 
     public function execute(): void
     {
+        $value = null;
         if ($this->source instanceof ConstantArgument) {
-            $this->stdout->writeString($this->source->getValue());
+            $value = $this->source->getValue();
         } else {
             $frame = $this->source->getFrame();
             $name = $this->source->getValue();
             $variable = $this->frameModel->getVariable($frame, $name);
-            $this->stdout->writeString($variable->getValue());
+            $value = $variable->getValue();
+        }
+
+        switch (gettype($value)) {
+            case 'boolean':
+                $this->stdout->writeBool($value);
+                break;
+            case 'integer':
+                $this->stdout->writeInt($value);
+                break;
+            case 'string':
+                $this->stdout->writeString($value);
+                break;
+            case 'NULL':
+                $this->stdout->writeString('nil');
+                break;
+            default:
+                $this->stdout->writeString('');
         }
     }
 }

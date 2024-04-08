@@ -2,13 +2,15 @@
 
 namespace IPP\Student;
 
+use IPP\Student\Exception\MissingValueException;
+
 class Variable
 {
     private string $name;
-    private ?string $value;
+    private string|int|bool|null $value;
     private bool $defined;
 
-    public function __construct(string $name, string $value = null)
+    public function __construct(string $name, string|int|bool|null $value)
     {
         $this->name = $name;
         $this->value = $value;
@@ -26,8 +28,11 @@ class Variable
         $this->defined = true;
     }
 
-    public function getValue(): ?string
+    public function getValue(): string|int|bool|null
     {
+        if ($this->defined === false) {
+            throw new MissingValueException("Variable: {$this->name} is not defined.");
+        }
         return $this->value;
     }
 

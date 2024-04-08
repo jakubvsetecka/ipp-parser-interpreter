@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\Arithmetics;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\OperandValueException;
 use IPP\Student\FrameModel;
 
 class IDIVInstruction extends Instruction
@@ -45,6 +46,10 @@ class IDIVInstruction extends Instruction
             $frame = $this->source2->getFrame();
             $variable = $this->frameModel->getVariable($frame, $name);
             $value2 = $variable->getValue();
+        }
+
+        if ($value2 === 0) {
+            throw new OperandValueException('Division by zero.');
         }
 
         $result = intdiv($value1, $value2);

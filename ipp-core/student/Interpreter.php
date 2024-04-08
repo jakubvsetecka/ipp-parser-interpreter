@@ -23,6 +23,7 @@ class Interpreter extends AbstractInterpreter
             $service_locator->register('scheduler', $scheduler);
             $service_locator->register('stdout', $this->stdout);
             $service_locator->register('stderr', $this->stderr);
+            $service_locator->register('stdin', $this->input);
 
             $dom = $this->source->getDOMDocument();
             $xml_parser = new XMLParser($dom, $service_locator);
@@ -34,6 +35,8 @@ class Interpreter extends AbstractInterpreter
 
             return $exit_code;
         } catch (Exception $e) {
+            echo $e->getMessage();
+            echo $e->getTraceAsString();
             return $e->getCode();
         }
     }

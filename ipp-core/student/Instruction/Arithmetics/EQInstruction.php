@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\Arithmetics;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 
 class EQInstruction extends Instruction
@@ -45,6 +46,10 @@ class EQInstruction extends Instruction
             $frame = $this->source2->getFrame();
             $variable = $this->frameModel->getVariable($frame, $name);
             $value2 = $variable->getValue();
+        }
+
+        if (gettype($value1) !== gettype($value2) && $value1 !== null && $value2 !== null) {
+            throw new OperandTypeException('Operands must be of the same type');
         }
 
         $result = $value1 == $value2 ? 'true' : 'false';

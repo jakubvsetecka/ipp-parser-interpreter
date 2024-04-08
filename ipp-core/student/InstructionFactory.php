@@ -65,7 +65,7 @@ class InstructionFactory
         'GETCHAR' => ['class' => GETCHARInstruction::class, 'services' => ['frame_model']],
         'SETCHAR' => ['class' => SETCHARInstruction::class, 'services' => ['frame_model']],
         'TYPE' => ['class' => TYPEInstruction::class, 'services' => ['frame_model']],
-        'LABEL' => ['class' => LABELInstruction::class, 'services' => []],
+        'LABEL' => ['class' => LABELInstruction::class, 'services' => ['scheduler']],
         'JUMP' => ['class' => JUMPInstruction::class, 'services' => ['scheduler']],
         'JUMPIFEQ' => ['class' => JUMPIFEQInstruction::class, 'services' => ['scheduler', 'frame_model']],
         'JUMPIFNEQ' => ['class' => JUMPIFNEQInstruction::class, 'services' => ['scheduler', 'frame_model']],
@@ -80,7 +80,7 @@ class InstructionFactory
         'RETURN' => ['class' => RETURNInstruction::class, 'services' => ['scheduler']],
         'PUSHS' => ['class' => PUSHSInstruction::class, 'services' => ['data_stack', 'frame_model']],
         'POPS' => ['class' => POPSInstruction::class, 'services' => ['data_stack', 'frame_model']],
-        'EXIT' => ['class' => EXITInstruction::class, 'services' => ['scheduler']],
+        'EXIT' => ['class' => EXITInstruction::class, 'services' => ['scheduler', 'frame_model']],
     ];
 
     public function __construct(ServiceLocator $serviceLocator)

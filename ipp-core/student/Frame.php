@@ -2,6 +2,9 @@
 
 namespace IPP\Student;
 
+use IPP\Student\Exception\OperandTypeException;
+use IPP\Student\Exception\SemanticException;
+use IPP\Student\Exception\VariableException;
 use IPP\Student\Variable;
 
 class Frame
@@ -33,13 +36,26 @@ class Frame
         $output = $line . $header . $line;
 
         foreach ($this->frame as $variable) {
-            if ($variable->getValue() === null) {
-                $variable->setValue('nil');
+            $name = $variable->getName();
+
+            if ($variable->isDefined() === false) {
+                $value = 'N/A';
+            } else {
+                $value = $variable->getValue();
             }
+
+            if (is_bool($value)) {
+                $value = $value ? 'true' : 'false';
+            }
+
+            if (is_null($value)) {
+                $value = 'nil';
+            }
+
             $output .= sprintf(
                 "| %-' {$nameMaxLength}s | %-' {$valueMaxLength}s |\n",
-                (string)$variable->getName(),
-                (string)$variable->getValue()
+                (string)$name,
+                (string)$value
             );
         }
 
@@ -50,12 +66,18 @@ class Frame
 
     public function addVariable(Variable $variable): void
     {
+        if ($this->containsVariable($variable->getName())) {
+            throw new SemanticException();
+        }
         $name = $variable->getName();
         $this->frame[$name] = $variable;
     }
 
     public function getVariable(string $name): Variable
     {
+        if (!$this->containsVariable($name)) {
+            throw new VariableException("Variable $name not found");
+        }
         return $this->frame[$name];
     }
 

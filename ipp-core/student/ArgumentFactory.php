@@ -10,29 +10,52 @@ use IPP\Student\Argument\VariableArgument;
 class ArgumentFactory
 {
     private static $map = [
-        'string' => ['pattern' => '/^.+$/', 'cast' => ConstantArgument::class],
-        'int' => ['pattern' => '/^.+$/', 'cast' => ConstantArgument::class],
-        'bool' => ['pattern' => '/^.+$/', 'cast' => ConstantArgument::class],
-        'nil' => ['pattern' => '/^.+$/', 'cast' => ConstantArgument::class],
-        'label' => ['pattern' => '/^.+$/', 'cast' => LabelArgument::class],
-        'type' => ['pattern' => '/^.+$/', 'cast' => TypeArgument::class],
-        'var' => ['pattern' => '/^.+$/', 'cast' => VariableArgument::class],
+        'string' => [
+            'pattern' => '/^(?:[^\\\\#\s]|\\\\[0-9]{3})+$/', // Matches string constants with the described constraints
+            'cast' => ConstantArgument::class
+        ],
+        'int' => [
+            'pattern' => '/^[-+]?\d+$/', // Matches signed or unsigned integers
+            'cast' => ConstantArgument::class
+        ],
+        'bool' => [
+            'pattern' => '/^true|false$/', // Matches boolean constants true or false
+            'cast' => ConstantArgument::class
+        ],
+        'nil' => [
+            'pattern' => '/^nil$/', // Matches the nil type
+            'cast' => ConstantArgument::class
+        ],
+        'label' => [
+            'pattern' => '/^[\w\-]+$/',
+            'cast' => LabelArgument::class
+        ],
+        'type' => [
+            'pattern' => '/^int|bool|string|nil$/', // Assuming 'type' operand expects a type name
+            'cast' => TypeArgument::class
+        ],
+        'var' => [
+            'pattern' => '/^(GF|TF|LF)@[\w\-]+$/',
+            'cast' => VariableArgument::class
+        ],
     ];
 
-    public static function create(string $type, string $value): Argument
+    public function create(string $type, string $value): Argument
     {
         if (!array_key_exists($type, self::$map) || !isset(self::$map[$type])) {
             throw new \Exception("Unsupported type: $type");
         }
 
         $typeInfo = self::$map[$type];
+        $value = trim($value);
+
         // Match regex
         if (preg_match($typeInfo['pattern'], $value) === 0) {
             throw new \Exception("Invalid value: $value");
         }
 
         // Convert the string to the appropriate type
-        $convertedValue = self::convertToProperType($type, $value);
+        $convertedValue = $this->convertToProperType($type, $value);
 
         // Use the converted value to instantiate the Argument
         $argument = new $typeInfo['cast']($convertedValue);
@@ -40,8 +63,7 @@ class ArgumentFactory
         return $argument;
     }
 
-
-    public static function convertToProperType(string $type, string $value)
+    private function convertToProperType(string $type, string $value)
     {
         switch ($type) {
             case 'int':
@@ -50,11 +72,18 @@ class ArgumentFactory
                 // This uses filter_var to convert to boolean. True values are "1", "true", "on", and "yes". Everything else is false.
                 return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
             case 'string':
-                return $value;
+                return $this->decodeEscapeSequences($value);
             case 'nil':
                 return null;
             default:
                 return $value;
         }
+    }
+
+    private function decodeEscapeSequences($string): string
+    {
+        return preg_replace_callback('/\\\\(\d{3})/', function ($matches) {
+            return chr((int)$matches[1]);
+        }, $string);
     }
 }

@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\Arithmetics;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 
 class ANDInstruction extends Instruction
@@ -45,6 +46,10 @@ class ANDInstruction extends Instruction
             $frame = $this->source2->getFrame();
             $variable = $this->frameModel->getVariable($frame, $name);
             $value2 = $variable->getValue();
+        }
+
+        if (gettype($value1) !== 'boolean' || gettype($value2) !== 'boolean') {
+            throw new OperandTypeException('Operands must be of the boolean type');
         }
 
         $result = $value1 & $value2;

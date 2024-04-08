@@ -5,6 +5,7 @@ namespace IPP\Student;
 class CallStack
 {
     private array $stack = [];
+    private array $labels = [];
 
     public function push(int $index): void
     {
@@ -24,5 +25,15 @@ class CallStack
     public function isEmpty(): bool
     {
         return empty($this->stack);
+    }
+
+    public function addLabel(string $label, int $index): void
+    {
+        $this->labels[$label] = $index;
+    }
+
+    public function containsLabel(string $label): bool
+    {
+        return array_key_exists($label, $this->labels);
     }
 }

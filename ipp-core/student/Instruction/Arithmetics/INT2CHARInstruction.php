@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\Arithmetics;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\StringOperationException;
 use IPP\Student\FrameModel;
 
 class INT2CHARInstruction extends Instruction
@@ -36,8 +37,7 @@ class INT2CHARInstruction extends Instruction
         }
 
         if (($result = mb_chr($value, $encoding = 'UTF-8')) === false) {
-            // TODO: throw exception
-            throw new \Exception('Invalid ASCII code');
+            throw new StringOperationException('Invalid character code');
         }
 
         $name = $this->destination->getValue();

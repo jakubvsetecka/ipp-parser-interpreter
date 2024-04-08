@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\Arithmetics;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\StringOperationException;
 use IPP\Student\FrameModel;
 
 class STR2INTInstruction extends Instruction
@@ -47,7 +48,9 @@ class STR2INTInstruction extends Instruction
             $index = $variable->getValue();
         }
 
-        $result = ord($value[$index]);
+        if (($result = mb_ord($value, $encoding = 'UTF-8')) === false) {
+            throw new StringOperationException('Invalid character code');
+        }
 
         $name = $this->destination->getValue();
         $frame = $this->destination->getFrame();
