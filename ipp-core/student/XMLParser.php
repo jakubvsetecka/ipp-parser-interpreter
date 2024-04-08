@@ -4,6 +4,7 @@ namespace IPP\Student;
 
 use DOMDocument;
 use DOMElement;
+use IPP\Student\Exception\XMLStructureException;
 
 class XMLParser
 {
@@ -34,7 +35,7 @@ class XMLParser
         $root = $this->dom->documentElement;
 
         if ($root->getAttribute('language') !== 'IPPcode24') {
-            throw new \Exception('Invalid language');
+            throw new XMLStructureException('Invalid language');
         }
     }
 
@@ -65,7 +66,7 @@ class XMLParser
             $instruction = $this->inst_factory->create($order, $opcode, $arguments);
 
             if (in_array($instruction->getOrder(), $this->orders)) {
-                throw new \Exception('Order must be unique');
+                throw new XMLStructureException('Order must be unique');
             }
 
             $this->orders[] = $instruction->getOrder();

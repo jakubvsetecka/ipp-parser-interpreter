@@ -5,6 +5,7 @@ namespace IPP\Student;
 use IPP\Core\Interface\OutputWriter;
 use IPP\Student\Exception\MissingValueException;
 use IPP\Student\Exception\SemanticException;
+use IPP\Student\Instruction\Control\LABELInstruction;
 
 class Scheduler
 {
@@ -72,9 +73,13 @@ class Scheduler
     public function jump(string $label): void
     {
         foreach ($this->instructions as $index => $instruction) {
-            if ($instruction->getLabel() === $label) {
-                $this->program_counter->setCounter($index);
-                return;
+            $class = get_class($instruction);
+            if ($class === LABELInstruction::class) {
+                $label_instruction = $instruction;
+                if ($label_instruction->getLabel() === $label) {
+                    $this->program_counter->setCounter($index);
+                    return;
+                }
             }
         }
 

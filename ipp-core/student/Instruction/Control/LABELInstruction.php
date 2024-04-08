@@ -48,4 +48,9 @@ class LABELInstruction extends Instruction
             $callStack->addLabel($this->label->getValue(), $this->order);
         }
     }
+
+    public function getLabel(): string
+    {
+        return $this->label->getValue();
+    }
 }

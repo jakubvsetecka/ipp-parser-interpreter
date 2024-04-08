@@ -3,6 +3,7 @@
 namespace IPP\Student;
 
 use IPP\Core\Exception\ParameterException;
+use IPP\Student\Exception\XMLStructureException;
 use IPP\Student\Instruction\Arithmetics\ADDInstruction;
 use IPP\Student\Instruction\Arithmetics\SUBInstruction;
 use IPP\Student\Instruction\Arithmetics\MULInstruction;
@@ -99,7 +100,7 @@ class InstructionFactory
     public function create(int $order, string $opcode, array $arguments): Instruction
     {
         if (!array_key_exists($opcode, self::$map)) {
-            throw new ParameterException("Unsupported opcode: $opcode");
+            throw new XMLStructureException("Unsupported opcode: $opcode");
         }
 
         $config = self::$map[$opcode];

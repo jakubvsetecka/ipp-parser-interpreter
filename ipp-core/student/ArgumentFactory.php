@@ -6,6 +6,7 @@ use IPP\Student\Argument\ConstantArgument;
 use IPP\Student\Argument\LabelArgument;
 use IPP\Student\Argument\TypeArgument;
 use IPP\Student\Argument\VariableArgument;
+use IPP\Student\Exception\XMLStructureException;
 
 class ArgumentFactory
 {
@@ -43,7 +44,7 @@ class ArgumentFactory
     public function create(string $type, string $value): Argument
     {
         if (!array_key_exists($type, self::$map) || !isset(self::$map[$type])) {
-            throw new \Exception("Unsupported type: $type");
+            throw new XMLStructureException("Unsupported type: $type");
         }
 
         $typeInfo = self::$map[$type];
@@ -51,7 +52,7 @@ class ArgumentFactory
 
         // Match regex
         if (preg_match($typeInfo['pattern'], $value) === 0) {
-            throw new \Exception("Invalid value: $value");
+            throw new XMLStructureException("Invalid value: $value");
         }
 
         // Convert the string to the appropriate type

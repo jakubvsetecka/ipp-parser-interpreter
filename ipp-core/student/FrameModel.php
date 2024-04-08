@@ -64,7 +64,7 @@ class FrameModel
                 break;
             case 'TF':
                 if ($this->TF === null) {
-                    throw new \InvalidArgumentException('Temporary frame is not defined');
+                    throw new FrameException('Temporary frame is not defined');
                 }
                 $this->TF->addVariable(new Variable($name, $value));
                 break;
@@ -72,7 +72,7 @@ class FrameModel
                 $this->LF->top()->addVariable(new Variable($name, $value));
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf('Invalid frame %s', $frame));
+                throw new FrameException(sprintf('Invalid frame %s', $frame));
         }
     }
 
@@ -83,17 +83,17 @@ class FrameModel
                 return $this->GF->getVariable($name);
             case 'TF':
                 if ($this->TF === null) {
-                    throw new \InvalidArgumentException('Temporary frame is not defined');
+                    throw new FrameException('Temporary frame is not defined');
                 }
                 return $this->TF->getVariable($name);
             case 'LF':
                 if ($this->LF->containsVariable($name)) {
                     return $this->LF->top()->getVariable($name);
                 } else {
-                    throw new \InvalidArgumentException(sprintf('Variable %s is not defined', $name));
+                    throw new FrameException(sprintf('Variable %s is not defined', $name));
                 }
             default:
-                throw new \InvalidArgumentException(sprintf('Invalid frame %s', $frame));
+                throw new FrameException(sprintf('Invalid frame %s', $frame));
         }
     }
 
@@ -105,7 +105,7 @@ class FrameModel
                 break;
             case 'TF':
                 if ($this->TF === null) {
-                    throw new \InvalidArgumentException('Temporary frame is not defined');
+                    throw new FrameException('Temporary frame is not defined');
                 }
                 $this->TF->getVariable($name)->setValue($value);
                 break;
@@ -113,11 +113,11 @@ class FrameModel
                 if ($this->LF->containsVariable($name)) {
                     $this->LF->top()->getVariable($name)->setValue($value);
                 } else {
-                    throw new \InvalidArgumentException(sprintf('Variable %s is not defined', $name));
+                    throw new FrameException(sprintf('Variable %s is not defined', $name));
                 }
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf('Invalid frame %s', $frame));
+                throw new FrameException(sprintf('Invalid frame %s', $frame));
         }
     }
 }

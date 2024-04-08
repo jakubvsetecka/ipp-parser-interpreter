@@ -14,7 +14,7 @@ class ServiceLocator
     public function get($key)
     {
         if (!array_key_exists($key, $this->services)) {
-            throw new \Exception("Service not found: " . $key);
+            return null;
         }
         return $this->services[$key];
     }

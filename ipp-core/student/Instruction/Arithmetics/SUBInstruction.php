@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\Arithmetics;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 
 class SUBInstruction extends Instruction
@@ -45,6 +46,10 @@ class SUBInstruction extends Instruction
             $frame = $this->source2->getFrame();
             $variable = $this->frameModel->getVariable($frame, $name);
             $value2 = $variable->getValue();
+        }
+
+        if (is_int($value1) === false || is_int($value2) === false) {
+            throw new OperandTypeException('Types of values must be integers');
         }
 
         $result = $value1 - $value2;
