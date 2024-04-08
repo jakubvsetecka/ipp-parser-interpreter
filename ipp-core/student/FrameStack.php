@@ -2,10 +2,12 @@
 
 namespace IPP\Student;
 
+use IPP\Student\Exception\FrameException;
 use IPP\Student\Frame;
 
 class FrameStack
 {
+    /** @var Frame[] */
     private array $stack;
 
     public function __construct()
@@ -30,11 +32,17 @@ class FrameStack
 
     public function pop(): Frame
     {
+        if (empty($this->stack)) {
+            throw new FrameException("Frame stack is empty.");
+        }
         return array_pop($this->stack);
     }
 
     public function top(): Frame
     {
+        if (empty($this->stack)) {
+            throw new FrameException("Frame stack is empty.");
+        }
         return end($this->stack);
     }
 

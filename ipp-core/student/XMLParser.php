@@ -12,7 +12,13 @@ class XMLParser
     private DOMDocument $dom;
     private InstructionFactory $inst_factory;
     private ArgumentFactory $arg_factory;
+    /**
+     * @var array<int>
+     */
     private array $orders = [];
+    /**
+     * @var array<string>
+     */
     private array $labels = [];
 
     public function __construct(DOMDocument $dom, ServiceLocator $service_locator)
@@ -22,6 +28,9 @@ class XMLParser
         $this->arg_factory = new ArgumentFactory();
     }
 
+    /**
+     * @return array<Instruction>
+     */
     public function run(): array
     {
         $this->validateLanguage();
@@ -35,11 +44,18 @@ class XMLParser
     {
         $root = $this->dom->documentElement;
 
+        if ($root === null) {
+            throw new XMLStructureException('Invalid XML structure');
+        }
+
         if ($root->getAttribute('language') !== 'IPPcode24') {
             throw new XMLStructureException('Invalid language');
         }
     }
 
+    /**
+     * @return array<Instruction>
+     */
     private function getInstructions(): array
     {
         // Get all 'instruction' elements
@@ -49,7 +65,7 @@ class XMLParser
 
         foreach ($instructions as $instruction) {
             // Directly access child nodes by tag name
-            $order = $instruction->getAttribute('order');
+            $order = (int)$instruction->getAttribute('order');
             $opcode = $instruction->getAttribute('opcode');
             $opcode = strtoupper($opcode);
 
@@ -86,6 +102,10 @@ class XMLParser
         return $parsedInstructions;
     }
 
+    /**
+     * @param array<Instruction> $instructions
+     * @return array<Instruction>
+     */
     private function sortInstructions(array $instructions): array
     {
         usort($instructions, function ($a, $b) {

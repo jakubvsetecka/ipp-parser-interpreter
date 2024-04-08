@@ -45,26 +45,26 @@ class FrameModel
     public function popFrame(): void
     {
         $frame = $this->LF->pop();
-        if ($frame === null) {
+        if ($frame == null) {
             throw new FrameException();
         }
         $this->TF = $frame;
     }
 
-    public function addVariable(string $frame, string $name, string $value = null): void
+    public function addVariable(string $frame, string $name, string|int|bool|null $value = null, bool $definition = true): void
     {
         switch ($frame) {
             case 'GF':
-                $this->GF->addVariable(new Variable($name, $value));
+                $this->GF->addVariable(new Variable($name, $value, $definition));
                 break;
             case 'TF':
                 if ($this->TF === null) {
                     throw new FrameException('Temporary frame is not defined');
                 }
-                $this->TF->addVariable(new Variable($name, $value));
+                $this->TF->addVariable(new Variable($name, $value, $definition));
                 break;
             case 'LF':
-                $this->LF->top()->addVariable(new Variable($name, $value));
+                $this->LF->top()->addVariable(new Variable($name, $value, $definition));
                 break;
             default:
                 throw new FrameException(sprintf('Invalid frame %s', $frame));

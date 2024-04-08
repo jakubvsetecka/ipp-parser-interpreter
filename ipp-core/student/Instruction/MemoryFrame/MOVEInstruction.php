@@ -31,10 +31,10 @@ class MOVEInstruction extends Instruction
         } else {
             $name = $this->source->getValue();
             $frame = $this->source->getFrame();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value = $variable->getValue();
         }
 
-        $this->frameModel->setVariable($this->destination->getFrame(), $this->destination->getValue(), $value);
+        $this->frameModel->setVariable($this->destination->getFrame(), (string)$this->destination->getValue(), $value);
     }
 }

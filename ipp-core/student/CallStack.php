@@ -2,10 +2,12 @@
 
 namespace IPP\Student;
 
+use RuntimeException;
+
 class CallStack
 {
+    /** @var int[] */
     private array $stack = [];
-    private array $labels = [];
 
     public function push(int $index): void
     {
@@ -14,26 +16,24 @@ class CallStack
 
     public function pop(): int
     {
-        return array_pop($this->stack);
+        $result = array_pop($this->stack);
+        if ($result === null) {
+            throw new RuntimeException('Call stack is empty');
+        }
+        return $result;
     }
 
     public function top(): int
     {
-        return end($this->stack);
+        $result = end($this->stack);
+        if ($result === false) {
+            throw new RuntimeException('Call stack is empty');
+        }
+        return $result;
     }
 
     public function isEmpty(): bool
     {
         return empty($this->stack);
-    }
-
-    public function addLabel(string $label, int $index): void
-    {
-        $this->labels[$label] = $index;
-    }
-
-    public function containsLabel(string $label): bool
-    {
-        return array_key_exists($label, $this->labels);
     }
 }

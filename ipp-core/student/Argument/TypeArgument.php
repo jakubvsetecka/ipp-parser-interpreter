@@ -6,13 +6,13 @@ use IPP\Student\Argument;
 
 class TypeArgument extends Argument
 {
-    public function __construct($value)
+    public function __construct(string $value)
     {
         $this->value = $value;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getValue();
+        return (string) $this->getValue();
     }
 }

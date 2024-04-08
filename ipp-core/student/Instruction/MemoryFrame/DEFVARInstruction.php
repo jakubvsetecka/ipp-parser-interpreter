@@ -23,6 +23,6 @@ class DEFVARInstruction extends Instruction
         $frame = $this->variable->getFrame();
         $name = $this->variable->getValue();
 
-        $this->frameModel->addVariable($frame, $name);
+        $this->frameModel->addVariable($frame, (string)$name, null, false);
     }
 }

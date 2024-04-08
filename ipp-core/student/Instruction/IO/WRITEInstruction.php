@@ -18,7 +18,7 @@ class WRITEInstruction extends Instruction
 
     public function __construct(int $order, ConstantArgument|VariableArgument $source, FrameModel $frameModel, OutputWriter $stdout)
     {
-        parent::__construct($order);
+        $this->order = $order;
         $this->source = $source;
         $this->frameModel = $frameModel;
         $this->stdout = $stdout;
@@ -32,7 +32,7 @@ class WRITEInstruction extends Instruction
         } else {
             $frame = $this->source->getFrame();
             $name = $this->source->getValue();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value = $variable->getValue();
         }
 

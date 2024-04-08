@@ -32,7 +32,7 @@ class NOTInstruction extends Instruction
         } else {
             $name = $this->source->getValue();
             $frame = $this->source->getFrame();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value = $variable->getValue();
         }
 
@@ -40,11 +40,11 @@ class NOTInstruction extends Instruction
             throw new OperandTypeException('Operand must be of the boolean type');
         }
 
-        $result = ~$value;
+        $result = !$value;
 
         $name = $this->destination->getValue();
         $frame = $this->destination->getFrame();
-        $variable = $this->frameModel->getVariable($frame, $name);
+        $variable = $this->frameModel->getVariable($frame, (string)$name);
         $variable->setValue($result);
     }
 }

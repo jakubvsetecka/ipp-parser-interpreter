@@ -17,12 +17,6 @@ class READInstruction extends Instruction
     private FrameModel $frameModel;
     private InputReader $stdin;
 
-    private static $map = [
-        'string' => '/^(?:[^\\\\#\s]|\\\\[0-9]{3})+$/',
-        'int' => '/^[-+]?\d+$/',
-        'bool' => '/^true|false$/',
-    ];
-
     public function __construct(int $order, VariableArgument $destination, TypeArgument $type, FrameModel $frameModel, InputReader $stdin)
     {
         $this->order = $order;
@@ -50,6 +44,6 @@ class READInstruction extends Instruction
                 throw new OperandTypeException("Invalid type: {$this->type->getValue()}");
         }
 
-        $this->frameModel->setVariable($this->destination->getFrame(), $this->destination->getValue(), $value);
+        $this->frameModel->setVariable($this->destination->getFrame(), (string)$this->destination->getValue(), $value);
     }
 }

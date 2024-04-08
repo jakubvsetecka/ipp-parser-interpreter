@@ -36,7 +36,7 @@ class SETCHARInstruction extends Instruction
         } else {
             $frame = $this->index->getFrame();
             $name = $this->index->getValue();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $indexValue = $variable->getValue();
         }
 
@@ -45,20 +45,18 @@ class SETCHARInstruction extends Instruction
         } else {
             $frame = $this->symbol->getFrame();
             $name = $this->symbol->getValue();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $symbolValue = $variable->getValue();
         }
 
         $destinationValue = null;
 
-        if ($this->destination instanceof ConstantArgument) {
-            $destinationValue = $this->destination->getValue();
-        } else {
-            $frame = $this->destination->getFrame();
-            $name = $this->destination->getValue();
-            $variable = $this->frameModel->getVariable($frame, $name);
-            $destinationValue = $variable->getValue();
-        }
+
+        $frame = $this->destination->getFrame();
+        $name = $this->destination->getValue();
+        $variable = $this->frameModel->getVariable($frame, (string)$name);
+        $destinationValue = $variable->getValue();
+
 
         if (!is_string($destinationValue)) {
             throw new OperandTypeException('Argument must be a string.');
@@ -68,12 +66,12 @@ class SETCHARInstruction extends Instruction
             throw new OperandTypeException('Index must be an integer.');
         }
 
-        if ($indexValue < 0 || $indexValue >= strlen($destinationValue) || strlen($symbolValue) === 0) {
+        if ($indexValue < 0 || $indexValue >= strlen((string)$destinationValue) || strlen((string)$symbolValue) === 0) {
             throw new StringOperationException('Index out of bounds.');
         }
 
         $destinationValue[$indexValue] = $symbolValue;
 
-        $this->frameModel->setVariable($this->destination->getFrame(), $this->destination->getValue(), $destinationValue);
+        $this->frameModel->setVariable($this->destination->getFrame(), (string)$this->destination->getValue(), $destinationValue);
     }
 }

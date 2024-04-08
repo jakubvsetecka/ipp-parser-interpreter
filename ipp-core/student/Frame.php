@@ -9,6 +9,9 @@ use IPP\Student\Variable;
 
 class Frame
 {
+    /**
+     * @var Variable[]
+     */
     private array $frame;
 
     public function __construct()

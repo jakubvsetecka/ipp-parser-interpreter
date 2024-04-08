@@ -46,7 +46,11 @@ use IPP\Student\Instruction\Control\EXITInstruction;
 class InstructionFactory
 {
     private ServiceLocator $serviceLocator;
-    private static $map = [
+    /**
+     * Map of opcodes to their respective classes and required services.
+     * @var array<string, array{class: string, services: array<string>}>
+     */
+    private static array $map = [
         'ADD' => ['class' => ADDInstruction::class, 'services' => ['frame_model']],
         'SUB' => ['class' => SUBInstruction::class, 'services' => ['frame_model']],
         'MUL' => ['class' => MULInstruction::class, 'services' => ['frame_model']],
@@ -94,7 +98,7 @@ class InstructionFactory
      *
      * @param int $order
      * @param string $opcode
-     * @param array $arguments
+     * @param array<Argument> $arguments
      * @return Instruction Returns an instance of Instruction or its subclass based on the opcode.
      */
     public function create(int $order, string $opcode, array $arguments): Instruction
@@ -107,12 +111,11 @@ class InstructionFactory
         $className = $config['class'];
 
         $services = [];
-        if (isset($config['services'])) {
-            // Fetch each service and add it to the services array
-            foreach ($config['services'] as $serviceType) {
-                $services[] = $this->serviceLocator->get($serviceType);
-            }
+
+        foreach ($config['services'] as $serviceType) {
+            $services[] = $this->serviceLocator->get($serviceType);
         }
+
 
         // Use the ... operator to pass $services as individual arguments
         $instruction = new $className($order, ...$arguments, ...$services);

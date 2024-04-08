@@ -25,13 +25,29 @@ class DPRINTInstruction extends Instruction
 
     public function execute(): void
     {
+        $value = null;
         if ($this->source instanceof ConstantArgument) {
-            $this->stderr->writeString($this->source->getValue());
+            $value = $this->source->getValue();
         } else {
             $frame = $this->source->getFrame();
             $name = $this->source->getValue();
-            $variable = $this->frameModel->getVariable($frame, $name);
-            $this->stderr->writeString($variable->getValue());
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
+            $value = $variable->getValue();
         }
+        $value = $this->toString($value);
+        $this->stderr->writeString($value);
+    }
+
+    private function toString(bool|int|string|null $value): string
+    {
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        } elseif (is_int($value)) {
+            return (string) $value;
+        } elseif (is_null($value)) {
+            return 'nil';
+        }
+
+        return (string) $value;
     }
 }

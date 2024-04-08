@@ -35,7 +35,7 @@ class STR2INTInstruction extends Instruction
         } else {
             $name = $this->source->getValue();
             $frame = $this->source->getFrame();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value = $variable->getValue();
         }
 
@@ -44,17 +44,17 @@ class STR2INTInstruction extends Instruction
         } else {
             $name = $this->index->getValue();
             $frame = $this->index->getFrame();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $index = $variable->getValue();
         }
 
-        if (($result = mb_ord($value, $encoding = 'UTF-8')) === false) {
+        if (($result = mb_ord((string)$value, $encoding = 'UTF-8')) == false) {
             throw new StringOperationException('Invalid character code');
         }
 
         $name = $this->destination->getValue();
         $frame = $this->destination->getFrame();
-        $variable = $this->frameModel->getVariable($frame, $name);
+        $variable = $this->frameModel->getVariable($frame, (string)$name);
         $variable->setValue($result);
     }
 }

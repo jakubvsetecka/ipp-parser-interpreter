@@ -32,7 +32,7 @@ class STRLENInstruction extends Instruction
         } else {
             $frame = $this->source->getFrame();
             $name = $this->source->getValue();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value = $variable->getValue();
         }
 
@@ -42,6 +42,6 @@ class STRLENInstruction extends Instruction
 
         $result = strlen($value);
 
-        $this->frameModel->setVariable($this->destination->getFrame(), $this->destination->getValue(), $result);
+        $this->frameModel->setVariable($this->destination->getFrame(), (string)$this->destination->getValue(), $result);
     }
 }

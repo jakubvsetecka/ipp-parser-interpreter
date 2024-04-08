@@ -10,11 +10,11 @@ class Variable
     private string|int|bool|null $value;
     private bool $defined;
 
-    public function __construct(string $name, string|int|bool|null $value)
+    public function __construct(string $name, string|int|bool|null $value, bool $defined = true)
     {
         $this->name = $name;
         $this->value = $value;
-        $this->defined = $value !== null;
+        $this->defined = $defined;
     }
 
     public function __toString()
@@ -22,7 +22,7 @@ class Variable
         return sprintf("%s %s", $this->name, $this->value);
     }
 
-    public function setValue($value): void
+    public function setValue(string|int|bool|null $value): void
     {
         $this->value = $value;
         $this->defined = true;

@@ -36,7 +36,7 @@ class GETCHARInstruction extends Instruction
         } else {
             $frame = $this->source->getFrame();
             $name = $this->source->getValue();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $sourceValue = $variable->getValue();
         }
 
@@ -45,7 +45,7 @@ class GETCHARInstruction extends Instruction
         } else {
             $frame = $this->index->getFrame();
             $name = $this->index->getValue();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $indexValue = $variable->getValue();
         }
 
@@ -63,6 +63,6 @@ class GETCHARInstruction extends Instruction
 
         $result = $sourceValue[$indexValue];
 
-        $this->frameModel->setVariable($this->destination->getFrame(), $this->destination->getValue(), $result);
+        $this->frameModel->setVariable($this->destination->getFrame(), (string)$this->destination->getValue(), $result);
     }
 }

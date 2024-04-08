@@ -4,15 +4,12 @@ namespace IPP\Student;
 
 use Exception;
 use IPP\Core\AbstractInterpreter;
-use IPP\Core\Exception\NotImplementedException;
 
 class Interpreter extends AbstractInterpreter
 {
     public function execute(): int
     {
         try {
-
-            // TODO: Start your code here
             $service_locator = new ServiceLocator();
             $frame_model = new FrameModel();
             $data_stack = new DataStack();

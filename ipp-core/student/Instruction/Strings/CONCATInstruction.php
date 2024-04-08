@@ -35,7 +35,7 @@ class CONCATInstruction extends Instruction
         } else {
             $frame = $this->source1->getFrame();
             $name = $this->source1->getValue();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value1 = $variable->getValue();
         }
 
@@ -44,7 +44,7 @@ class CONCATInstruction extends Instruction
         } else {
             $frame = $this->source2->getFrame();
             $name = $this->source2->getValue();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value2 = $variable->getValue();
         }
 
@@ -54,6 +54,6 @@ class CONCATInstruction extends Instruction
 
         $result = $value1 . $value2;
 
-        $this->frameModel->setVariable($this->destination->getFrame(), $this->destination->getValue(), $result);
+        $this->frameModel->setVariable($this->destination->getFrame(), (string)$this->destination->getValue(), $result);
     }
 }

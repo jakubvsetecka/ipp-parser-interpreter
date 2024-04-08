@@ -35,7 +35,7 @@ class LTInstruction extends Instruction
         } else {
             $name = $this->source1->getValue();
             $frame = $this->source1->getFrame();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value1 = $variable->getValue();
         }
 
@@ -44,7 +44,7 @@ class LTInstruction extends Instruction
         } else {
             $name = $this->source2->getValue();
             $frame = $this->source2->getFrame();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value2 = $variable->getValue();
         }
 
@@ -60,7 +60,7 @@ class LTInstruction extends Instruction
 
         $name = $this->destination->getValue();
         $frame = $this->destination->getFrame();
-        $variable = $this->frameModel->getVariable($frame, $name);
+        $variable = $this->frameModel->getVariable($frame, (string)$name);
         $variable->setValue($result);
     }
 }

@@ -4,19 +4,22 @@ namespace IPP\Student;
 
 abstract class Argument
 {
-    protected $value;
+    protected string|int|bool|null $value;
 
-    public function __construct($value)
+    public function __construct(string|int|bool|null $value)
     {
         $this->value = $value;
     }
 
-    public function getValue()
+    public function getValue(): string|int|bool|null
     {
         return $this->value;
     }
 
-    public function getAttributes()
+    /**
+     * @return array<string|mixed>
+     */
+    public function getAttributes(): array
     {
         return get_object_vars($this);
     }

@@ -8,18 +8,18 @@ class ConstantArgument extends Argument
 {
     private Int|Bool|String|null $constant;
 
-    public function __construct($constant)
+    public function __construct(Int|Bool|String|null $constant)
     {
         $this->constant = $constant;
         $this->value = $constant;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->constant;
+        return (string) $this->constant;
     }
 
-    public function getValue()
+    public function getValue(): Int|Bool|String|null
     {
         return $this->constant;
     }

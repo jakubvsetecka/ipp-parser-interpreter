@@ -40,6 +40,6 @@ class LABELInstruction extends Instruction
 
     public function getLabel(): string
     {
-        return $this->label->getValue();
+        return (string)$this->label->getValue();
     }
 }

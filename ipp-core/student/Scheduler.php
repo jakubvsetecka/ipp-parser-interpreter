@@ -2,13 +2,15 @@
 
 namespace IPP\Student;
 
-use IPP\Core\Interface\OutputWriter;
 use IPP\Student\Exception\MissingValueException;
 use IPP\Student\Exception\SemanticException;
 use IPP\Student\Instruction\Control\LABELInstruction;
 
 class Scheduler
 {
+    /**
+     * @var array<Instruction>
+     */
     private array $instructions = [];
     private ProgramCounter $program_counter;
     private CallStack $call_stack;
@@ -35,11 +37,18 @@ class Scheduler
         return $this->call_stack;
     }
 
+    /**
+     * @param array<Instruction> $instructions
+     * @return void
+     */
     public function setInstructions(array $instructions): void
     {
         $this->instructions = $instructions;
     }
 
+    /**
+     * @return array<Instruction>
+     */
     public function getInstructions(): array
     {
         return $this->instructions;
@@ -58,7 +67,7 @@ class Scheduler
 
     public function call(string $label): void
     {
-        $this->call_stack[] = $this->program_counter->getCounter();
+        $this->call_stack->push($this->program_counter->getCounter());
         $this->jump($label);
     }
 
@@ -67,14 +76,14 @@ class Scheduler
         if ($this->call_stack->isEmpty()) {
             throw new MissingValueException("Call stack is empty");
         }
+
         $this->program_counter->setCounter($this->call_stack->pop());
     }
 
     public function jump(string $label): void
     {
         foreach ($this->instructions as $index => $instruction) {
-            $class = get_class($instruction);
-            if ($class === LABELInstruction::class) {
+            if ($instruction instanceof LABELInstruction) {
                 $label_instruction = $instruction;
                 if ($label_instruction->getLabel() === $label) {
                     $this->program_counter->setCounter($index);

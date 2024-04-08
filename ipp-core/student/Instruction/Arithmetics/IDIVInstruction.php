@@ -5,6 +5,7 @@ namespace IPP\Student\Instruction\Arithmetics;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\Exception\OperandValueException;
 use IPP\Student\FrameModel;
 
@@ -35,7 +36,7 @@ class IDIVInstruction extends Instruction
         } else {
             $name = $this->source1->getValue();
             $frame = $this->source1->getFrame();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value1 = $variable->getValue();
         }
 
@@ -44,8 +45,12 @@ class IDIVInstruction extends Instruction
         } else {
             $name = $this->source2->getValue();
             $frame = $this->source2->getFrame();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value2 = $variable->getValue();
+        }
+
+        if (is_int($value1) === false || is_int($value2) === false) {
+            throw new OperandTypeException('Types of values must be integers');
         }
 
         if ($value2 === 0) {
@@ -56,7 +61,7 @@ class IDIVInstruction extends Instruction
 
         $name = $this->destination->getValue();
         $frame = $this->destination->getFrame();
-        $variable = $this->frameModel->getVariable($frame, $name);
+        $variable = $this->frameModel->getVariable($frame, (string)$name);
         $variable->setValue($result);
     }
 }

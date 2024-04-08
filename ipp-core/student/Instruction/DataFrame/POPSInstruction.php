@@ -33,7 +33,7 @@ class POPSInstruction extends Instruction
 
         $name = $this->destination->getValue();
         $frame = $this->destination->getFrame();
-        $variable = $this->frameModel->getVariable($frame, $name);
+        $variable = $this->frameModel->getVariable($frame, (string)$name);
         $variable->setValue($value);
     }
 }

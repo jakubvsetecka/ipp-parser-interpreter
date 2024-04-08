@@ -32,7 +32,7 @@ class PUSHSInstruction extends Instruction
         } else {
             $name = $this->source->getValue();
             $frame = $this->source->getFrame();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value = $variable->getValue();
         }
 

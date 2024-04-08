@@ -6,20 +6,20 @@ use IPP\Student\Argument;
 
 class VariableArgument extends Argument
 {
-    private $frame;
+    private string $frame;
 
-    public function __construct($value)
+    public function __construct(string $value)
     {
         $this->frame = substr($value, 0, 2);
         $this->value = substr($value, 3);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getValue();
+        return (string) $this->getValue();
     }
 
-    public function getFrame()
+    public function getFrame(): string
     {
         return $this->frame;
     }

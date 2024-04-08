@@ -10,7 +10,11 @@ use IPP\Student\Exception\XMLStructureException;
 
 class ArgumentFactory
 {
-    private static $map = [
+    /**
+     * Map of supported types with their regex patterns and corresponding Argument classes
+     * @var array<string, array{pattern: string, cast: string}>
+     */
+    private static array $map = [
         'string' => [
             'pattern' => '/^(?:[^\\\\#\s]|\\\\[0-9]{3})*$/', // Matches string constants with the described constraints
             'cast' => ConstantArgument::class
@@ -61,10 +65,12 @@ class ArgumentFactory
         // Use the converted value to instantiate the Argument
         $argument = new $typeInfo['cast']($convertedValue);
 
+        assert($argument instanceof Argument);
+
         return $argument;
     }
 
-    private function convertToProperType(string $type, string $value)
+    private function convertToProperType(string $type, string $value): mixed
     {
         switch ($type) {
             case 'int':
@@ -81,7 +87,7 @@ class ArgumentFactory
         }
     }
 
-    private function decodeEscapeSequences($string): string
+    private function decodeEscapeSequences(string $string): ?string
     {
         return preg_replace_callback('/\\\\(\d{3})/', function ($matches) {
             return chr((int)$matches[1]);

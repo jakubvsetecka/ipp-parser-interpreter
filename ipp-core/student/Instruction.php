@@ -10,12 +10,12 @@ abstract class Instruction
 
     abstract public function execute(): void;
 
-    public function __construct(string $order)
+    public function __construct(int $order)
     {
         $this->order = $order;
     }
 
-    public function getOrder(): string
+    public function getOrder(): int
     {
         return $this->order;
     }
@@ -23,7 +23,7 @@ abstract class Instruction
     /**
      * Prints the instruction details.
      */
-    public function print(OutputWriter $out)
+    public function print(OutputWriter $out): void
     {
         $simpleClassName = $this->getSimpleName(get_class($this));
         $out->writeString($simpleClassName . "(" . $this->order . ")" . ":\n");
@@ -71,7 +71,7 @@ abstract class Instruction
         return $typeName;
     }
 
-    private function printObjectAttributes($object, OutputWriter $out): void
+    private function printObjectAttributes(object $object, OutputWriter $out): void
     {
         $reflectionClass = new \ReflectionClass($object);
         $attributes = $reflectionClass->getProperties();
@@ -94,7 +94,7 @@ abstract class Instruction
         }
     }
 
-    private function getSimpleName(string $name): string
+    private function getSimpleName(string $name): ?string
     {
         $simpleName = basename(str_replace('\\', '/', $name));
         // Use regex to remove everything from the last uppercase letter onwards

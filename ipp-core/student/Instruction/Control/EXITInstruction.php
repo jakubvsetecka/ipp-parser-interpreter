@@ -32,7 +32,7 @@ class EXITInstruction extends Instruction
         } else {
             $name = $this->return_code->getValue();
             $frame = $this->return_code->getFrame();
-            $variable = $this->frameModel->getVariable($frame, $name);
+            $variable = $this->frameModel->getVariable($frame, (string)$name);
             $value = $variable->getValue();
         }
 

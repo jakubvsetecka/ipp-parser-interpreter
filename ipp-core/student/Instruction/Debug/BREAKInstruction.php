@@ -15,7 +15,7 @@ class BREAKInstruction extends Instruction
 
     public function __construct(int $order, Scheduler $scheduler, OutputWriter $stderr, FrameModel $frameModel)
     {
-        parent::__construct($order);
+        $this->order = $order;
         $this->scheduler = $scheduler;
         $this->stderr = $stderr;
         $this->frameModel = $frameModel;

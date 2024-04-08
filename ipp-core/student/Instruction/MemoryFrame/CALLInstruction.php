@@ -16,10 +16,11 @@ class CALLInstruction extends Instruction
     {
         $this->order = $order;
         $this->label = $label;
+        $this->scheduler = $scheduler;
     }
 
     public function execute(): void
     {
-        $this->scheduler->call($this->label->getValue());
+        $this->scheduler->call((string)$this->label->getValue());
     }
 }

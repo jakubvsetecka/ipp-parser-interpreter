@@ -21,6 +21,6 @@ class JUMPInstruction extends Instruction
 
     public function execute(): void
     {
-        $this->scheduler->jump($this->label->getValue());
+        $this->scheduler->jump((string)$this->label->getValue());
     }
 }
