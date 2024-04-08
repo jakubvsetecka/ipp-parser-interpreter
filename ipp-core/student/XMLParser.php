@@ -10,6 +10,7 @@ class XMLParser
     private DOMDocument $dom;
     private InstructionFactory $inst_factory;
     private ArgumentFactory $arg_factory;
+    private array $orders = [];
 
     public function __construct(DOMDocument $dom, ServiceLocator $service_locator)
     {
@@ -50,7 +51,16 @@ class XMLParser
                 }
             }
 
-            $parsedInstructions[] = $this->inst_factory->create($order, $opcode, $arguments);
+            $instruction = $this->inst_factory->create($order, $opcode, $arguments);
+
+            if (in_array($instruction->getOrder(), $this->orders)) {
+                echo "Order must be unique\n";
+                throw new \Exception('Order must be unique');
+            }
+
+            $this->orders[] = $instruction->getOrder();
+
+            $parsedInstructions[] = $instruction;
         }
 
         return $parsedInstructions;
@@ -59,9 +69,6 @@ class XMLParser
     private function sortInstructions(array $instructions): array
     {
         usort($instructions, function ($a, $b) {
-            if ($a->getOrder() === $b->getOrder()) {
-                throw new \Exception("Duplicate order value: {$a->getOrder()}");
-            }
             return $a->getOrder() <=> $b->getOrder();
         });
 
