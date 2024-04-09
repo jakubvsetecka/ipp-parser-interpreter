@@ -1,10 +1,18 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
 use Exception;
 use IPP\Core\AbstractInterpreter;
 
+/**
+ * The main class of the interpreter.
+ */
 class Interpreter extends AbstractInterpreter
 {
     public function execute(): int

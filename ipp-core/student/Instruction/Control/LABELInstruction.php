@@ -1,10 +1,18 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Control;
 
 use IPP\Student\Instruction;
 use IPP\Student\Argument\LabelArgument;
 
+/**
+ * LABEL instruction class.
+ */
 class LABELInstruction extends Instruction
 {
     private LabelArgument $label;

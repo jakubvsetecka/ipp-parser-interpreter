@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
+/**
+ * Program counter.
+ */
 class ProgramCounter
 {
     private int $counter = 0;

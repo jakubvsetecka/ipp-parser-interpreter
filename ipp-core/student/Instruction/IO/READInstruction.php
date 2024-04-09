@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\IO;
 
 use IPP\Core\Interface\InputReader;
@@ -9,6 +14,9 @@ use IPP\Student\Argument\TypeArgument;
 use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 
+/**
+ * READ instruction class.
+ */
 class READInstruction extends Instruction
 {
     private VariableArgument $destination;

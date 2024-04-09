@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Control;
 
 use IPP\Student\Instruction;
@@ -10,6 +15,9 @@ use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 use IPP\Student\Scheduler;
 
+/**
+ * JUMPIFNEQ instruction class.
+ */
 class JUMPIFNEQInstruction extends Instruction
 {
     private LabelArgument $label;

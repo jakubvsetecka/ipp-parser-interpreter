@@ -1,8 +1,12 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
-use IPP\Core\Exception\ParameterException;
 use IPP\Student\Exception\XMLStructureException;
 use IPP\Student\Instruction\Arithmetics\ADDInstruction;
 use IPP\Student\Instruction\Arithmetics\SUBInstruction;

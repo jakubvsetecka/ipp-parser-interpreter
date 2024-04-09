@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
+/**
+ * Data stack for the interpret.
+ */
 class DataStack
 {
     /** @var int[]|string[]|bool[]|null[] */

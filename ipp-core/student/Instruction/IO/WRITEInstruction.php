@@ -1,14 +1,21 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\IO;
 
 use IPP\Core\Interface\OutputWriter;
 use IPP\Student\Argument\ConstantArgument;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
-use IPP\Student\Frame;
 use IPP\Student\FrameModel;
 
+/**
+ * WRITE instruction class.
+ */
 class WRITEInstruction extends Instruction
 {
     private ConstantArgument|VariableArgument $source;

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\DataFrame;
 
 use IPP\Student\Instruction;
@@ -8,6 +13,9 @@ use IPP\Student\DataStack;
 use IPP\Student\Exception\MissingValueException;
 use IPP\Student\FrameModel;
 
+/**
+ * POPS instruction class.
+ */
 class POPSInstruction extends Instruction
 {
     private VariableArgument $destination;

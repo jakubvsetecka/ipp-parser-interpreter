@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
 use IPP\Student\Argument\ConstantArgument;
@@ -8,6 +13,9 @@ use IPP\Student\Argument\TypeArgument;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Exception\XMLStructureException;
 
+/**
+ * Argument factory for creating Argument objects based on their type.
+ */
 class ArgumentFactory
 {
     /**
@@ -77,7 +85,7 @@ class ArgumentFactory
                 return (int)$value;
             case 'bool':
                 // This uses filter_var to convert to boolean. True values are "1", "true", "on", and "yes". Everything else is false.
-                return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
+                return $value === 'true' ? true : false;
             case 'string':
                 return $this->decodeEscapeSequences($value);
             case 'nil':

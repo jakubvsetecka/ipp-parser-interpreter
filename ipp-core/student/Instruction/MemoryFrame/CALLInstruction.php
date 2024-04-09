@@ -1,11 +1,19 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\MemoryFrame;
 
 use IPP\Student\Instruction;
 use IPP\Student\Argument\LabelArgument;
 use IPP\Student\Scheduler;
 
+/**
+ * CALL instruction class.
+ */
 class CALLInstruction extends Instruction
 {
     private LabelArgument $label;

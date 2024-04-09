@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
+/**
+ * Service locator is used for storing and retrieving services.
+ */
 class ServiceLocator
 {
     /** @var array<string, mixed> */

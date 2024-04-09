@@ -1,11 +1,19 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Control;
 
 use IPP\Student\Instruction;
 use IPP\Student\Argument\LabelArgument;
 use IPP\Student\Scheduler;
 
+/**
+ * JUMP instruction class.
+ */
 class JUMPInstruction extends Instruction
 {
     private LabelArgument $label;

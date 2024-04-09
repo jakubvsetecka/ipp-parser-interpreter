@@ -1,12 +1,19 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
-use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\Exception\SemanticException;
 use IPP\Student\Exception\VariableException;
 use IPP\Student\Variable;
 
+/**
+ * Frame representing a frame according to the IPP specification.
+ */
 class Frame
 {
     /**

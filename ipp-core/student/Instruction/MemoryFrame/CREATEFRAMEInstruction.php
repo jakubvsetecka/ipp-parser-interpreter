@@ -1,10 +1,18 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\MemoryFrame;
 
 use IPP\Student\FrameModel;
 use IPP\Student\Instruction;
 
+/**
+ * CREATEFRAME instruction class.
+ */
 class CREATEFRAMEInstruction extends Instruction
 {
     private FrameModel $frameModel;

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Strings;
 
 use IPP\Student\Instruction;
@@ -8,6 +13,9 @@ use IPP\Student\Argument\ConstantArgument;
 use IPP\Student\Exception\StringOperationException;
 use IPP\Student\FrameModel;
 
+/**
+ * STRLEN instruction class.
+ */
 class STRLENInstruction extends Instruction
 {
     private VariableArgument $destination;

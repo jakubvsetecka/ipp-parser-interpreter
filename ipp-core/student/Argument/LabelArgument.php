@@ -1,10 +1,17 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Argument;
 
 use IPP\Student\Argument;
-use IPP\Student\Argument\RegexPattern\RegexPattern;
 
+/**
+ * Argument representing a label.
+ */
 class LabelArgument extends Argument
 {
     public function __construct(string $value)

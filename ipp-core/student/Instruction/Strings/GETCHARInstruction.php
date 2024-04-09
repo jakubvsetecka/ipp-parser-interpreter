@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Strings;
 
 use IPP\Student\Instruction;
@@ -9,6 +14,9 @@ use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\Exception\StringOperationException;
 use IPP\Student\FrameModel;
 
+/**
+ * GETCHAR instruction class.
+ */
 class GETCHARInstruction extends Instruction
 {
     private VariableArgument $destination;

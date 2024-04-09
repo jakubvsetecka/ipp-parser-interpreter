@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
+/**
+ * Abstract argument class.
+ */
 abstract class Argument
 {
     protected string|int|bool|null $value;

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Arithmetics;
 
 use IPP\Student\Instruction;
@@ -9,6 +14,9 @@ use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\Exception\OperandValueException;
 use IPP\Student\FrameModel;
 
+/**
+ * IDIV instruction class.
+ */
 class IDIVInstruction extends Instruction
 {
     private VariableArgument $destination;

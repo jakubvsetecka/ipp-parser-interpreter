@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Debug;
 
 use IPP\Core\Interface\OutputWriter;
@@ -7,6 +12,9 @@ use IPP\Student\FrameModel;
 use IPP\Student\Instruction;
 use IPP\Student\Scheduler;
 
+/**
+ * BREAK instruction class.
+ */
 class BREAKInstruction extends Instruction
 {
     private Scheduler $scheduler;

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Types;
 
 use IPP\Student\Instruction;
@@ -7,6 +12,9 @@ use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
 use IPP\Student\FrameModel;
 
+/**
+ * TYPE instruction class.
+ */
 class TYPEInstruction extends Instruction
 {
     private VariableArgument $destination;

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Debug;
 
 use IPP\Core\Interface\OutputWriter;
@@ -8,6 +13,9 @@ use IPP\Student\Argument\ConstantArgument;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\FrameModel;
 
+/**
+ * DPRINT instruction class.
+ */
 class DPRINTInstruction extends Instruction
 {
     private ConstantArgument|VariableArgument $source;

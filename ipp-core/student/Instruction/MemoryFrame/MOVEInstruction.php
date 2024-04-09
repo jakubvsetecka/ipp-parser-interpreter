@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\MemoryFrame;
 
 use IPP\Student\Instruction;
@@ -7,6 +12,9 @@ use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
 use IPP\Student\FrameModel;
 
+/**
+ * MOVE instruction class.
+ */
 class MOVEInstruction extends Instruction
 {
     private VariableArgument $destination;

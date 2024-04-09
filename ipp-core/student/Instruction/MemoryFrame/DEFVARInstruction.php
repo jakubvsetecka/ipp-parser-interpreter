@@ -1,11 +1,19 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\MemoryFrame;
 
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\FrameModel;
 
+/**
+ * DEFVAR instruction class.
+ */
 class DEFVARInstruction extends Instruction
 {
     private VariableArgument $variable;

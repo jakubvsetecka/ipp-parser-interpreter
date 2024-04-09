@@ -1,11 +1,19 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
 use IPP\Student\Exception\MissingValueException;
 use IPP\Student\Exception\SemanticException;
 use IPP\Student\Instruction\Control\LABELInstruction;
 
+/**
+ * Scheduler is responsible for executing instructions in the correct order.
+ */
 class Scheduler
 {
     /**
@@ -54,10 +62,10 @@ class Scheduler
         return $this->instructions;
     }
 
-    public function getNextInstruction(): ?Instruction // Allow null to be returned
+    public function getNextInstruction(): ?Instruction
     {
         if ($this->program_counter->getCounter() >= count($this->instructions)) {
-            return null; // Or handle end-of-instructions scenario as appropriate
+            return null;
         }
 
         $instruction = $this->instructions[$this->program_counter->getCounter()];

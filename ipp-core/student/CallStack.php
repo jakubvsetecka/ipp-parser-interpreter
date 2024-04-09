@@ -1,9 +1,17 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
 use RuntimeException;
 
+/**
+ * Call stack stores indexes of instructions.
+ */
 class CallStack
 {
     /** @var int[] */

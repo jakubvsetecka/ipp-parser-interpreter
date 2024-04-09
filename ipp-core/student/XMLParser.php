@@ -1,12 +1,19 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
 use DOMDocument;
-use DOMElement;
 use IPP\Student\Exception\XMLStructureException;
 use IPP\Student\Instruction\Control\LABELInstruction;
 
+/**
+ * XML parser.
+ */
 class XMLParser
 {
     private DOMDocument $dom;

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
 use IPP\Student\Variable;
@@ -7,6 +12,9 @@ use IPP\Student\FrameStack;
 use IPP\Student\Frame;
 use IPP\Student\Exception\FrameException;
 
+/**
+ * Model of frames. Contains global frame, temporary frame and local frame stack.
+ */
 class FrameModel
 {
     private Frame $GF;

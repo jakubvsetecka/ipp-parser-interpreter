@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\DataFrame;
 
 use IPP\Student\Instruction;
@@ -8,6 +13,9 @@ use IPP\Student\Argument\VariableArgument;
 use IPP\Student\DataStack;
 use IPP\Student\FrameModel;
 
+/**
+ * PUSHS instruction class.
+ */
 class PUSHSInstruction extends Instruction
 {
     private ConstantArgument|VariableArgument $source;

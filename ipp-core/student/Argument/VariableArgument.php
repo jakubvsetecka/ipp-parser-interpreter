@@ -1,9 +1,17 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Argument;
 
 use IPP\Student\Argument;
 
+/**
+ * Argument representing a variable.
+ */
 class VariableArgument extends Argument
 {
     private string $frame;

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Arithmetics;
 
 use IPP\Student\Instruction;
@@ -8,6 +13,9 @@ use IPP\Student\Argument\ConstantArgument;
 use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 
+/**
+ * NOT instruction class.
+ */
 class NOTInstruction extends Instruction
 {
     private VariableArgument $destination;

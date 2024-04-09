@@ -1,9 +1,17 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
 use IPP\Core\Interface\OutputWriter;
 
+/**
+ * Abstract class representing an instruction.
+ */
 abstract class Instruction
 {
     protected int $order;

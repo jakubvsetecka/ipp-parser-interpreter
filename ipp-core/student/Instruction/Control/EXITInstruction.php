@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\Control;
 
 use IPP\Student\Instruction;
@@ -9,6 +14,9 @@ use IPP\Student\Exception\OperandValueException;
 use IPP\Student\FrameModel;
 use IPP\Student\Scheduler;
 
+/**
+ * EXIT instruction class.
+ */
 class EXITInstruction extends Instruction
 {
     private ConstantArgument|VariableArgument $return_code;

@@ -1,10 +1,18 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student\Instruction\MemoryFrame;
 
 use IPP\Student\Instruction;
 use IPP\Student\FrameModel;
 
+/**
+ * POPFRAME instruction class.
+ */
 class PUSHFRAMEInstruction extends Instruction
 {
     private FrameModel $frameModel;

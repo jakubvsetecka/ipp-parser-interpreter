@@ -1,10 +1,18 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
 use IPP\Student\Exception\FrameException;
 use IPP\Student\Frame;
 
+/**
+ * Frame stack.
+ */
 class FrameStack
 {
     /** @var Frame[] */

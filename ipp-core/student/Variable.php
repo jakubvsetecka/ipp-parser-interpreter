@@ -1,9 +1,17 @@
 <?php
 
+/**
+ * IPP - PHP Project Core
+ * @author Jakub Všetečka
+ */
+
 namespace IPP\Student;
 
 use IPP\Student\Exception\MissingValueException;
 
+/**
+ * Variable is used to store a variable name and its value in the Frame class.
+ */
 class Variable
 {
     private string $name;
