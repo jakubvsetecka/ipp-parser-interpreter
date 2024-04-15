@@ -2,43 +2,44 @@ Implementační dokumentace k 2. úloze do IPP 2023/2024
 Jméno a příjmení: Jakub Všetečka
 Login: xvsete00
 
-- [[#Návrh|Návrh]]
-- [[#Interní reprezentace|Interní reprezentace]]
-		- [[#`Interpreter`|`Interpreter`]]
-		- [[#`XMLparser`|`XMLparser`]]
-		- [[#`ArgumentFactory`|`ArgumentFactory`]]
-		- [[#`InstructionFactory`|`InstructionFactory`]]
-		- [[#`Frame`|`Frame`]]
-		- [[#`FrameStack`|`FrameStack`]]
-		- [[#`FrameModel`|`FrameModel`]]
-		- [[#`Variable`|`Variable`]]
-		- [[#`DataStack`|`DataStack`]]
-		- [[#`ServiceLocator`|`ServiceLocator`]]
-		- [[#`ProgramCounter`|`ProgramCounter`]]
-		- [[#`CallStack`|`CallStack`]]
-		- [[#`Scheduler`|`Scheduler`]]
-- [[#Implementace|Implementace]]
-- [[#Implementace#Literatura|Literatura]]
+- [Návrh](#návrh)
+- [Interní reprezentace](#interní-reprezentace)
+	- [`Interpreter`](#interpreter)
+	- [`XMLparser`](#xmlparser)
+	- [`ArgumentFactory`](#argumentfactory)
+	- [`InstructionFactory`](#instructionfactory)
+	- [`Frame`](#frame)
+	- [`FrameStack`](#framestack)
+	- [`FrameModel`](#framemodel)
+	- [`Variable`](#variable)
+	- [`DataStack`](#datastack)
+	- [`ServiceLocator`](#servicelocator)
+	- [`ProgramCounter`](#programcounter)
+	- [`CallStack`](#callstack)
+	- [`Scheduler`](#scheduler)
+- [Implementace](#implementace)
+- [Literatura](#literatura)
+
 
 ## Návrh
-Při řešení tohoto projektu bylo mým cílem nejen rozšířit ipp-core o funkční implementaci interpretu pro XML reprezentaci jazyka IPPcode24, ale zaměřit se i na její škálovatelnost (přidávání nových instrukcí, či argumentů) a čitelnost. 
+Při řešení tohoto projektu bylo mým cílem nejen rozšířit ipp-core o funkční implementaci interpretu pro XML reprezentaci jazyka IPPcode24, ale zaměřit se i na její škálovatelnost (přidávání nových instrukcí, či argumentů) a čitelnost.
 
 Proto jsem se při návrhu objektového modelu interpretu rozhodl za použití známých paradigmat jako zapouzdření a dědičnost vytvořit vlastní podtřídu pro každou instrukci:
-![Schéma instrukcí](InstructionScheme.png)
+![Schéma instrukcí](imgs/InstructionScheme.png)
 
-Stejně jsem postupoval i při návrhu schématu argumentů. 
-![[ArgumentScheme.png]]
+Stejně jsem postupoval i při návrhu schématu argumentů.
+![Schéma argumentů](imgs/ArgumentScheme.png)
 
-Za konstrukci instancí třídy `Argument` a `Instruction` a jejích podtříd jsou zodpovědné třídy `ArgumentFactory` a `InstructionFactory`. Tyto třídy proces tvorby argumentů a instrukcí unifikují a odpovídají tak návrhovému vzoru `Builder` (podle [[#^d8750b]]).
+Za konstrukci instancí třídy `Argument` a `Instruction` a jejích podtříd jsou zodpovědné třídy `ArgumentFactory` a `InstructionFactory`. Tyto třídy proces tvorby argumentů a instrukcí unifikují a odpovídají tak návrhovému vzoru `Builder` (podle [1]).
 
 Samotný běh programu je potom možné rozdělit do dvou částí:
 1. zpracování XML reprezentace kódu a vytvoření seznamu instrukcí
 2. Iterativně procházet instrukce a volání jejich metody `execute`
-![[FlowDiagram.png]]
+![Flow diagram](imgs/FlowDiagram.png)
 ## Interní reprezentace
 V téhle části se zaměřím na detailnější popis struktury tříd a jejich vzájemné interakce
 
-![[ClassDiagram.png]]
+![Diagram tříd](imgs/ClassDiagram.png)
 Z diagramu tříd byly pro přehlednost vynechány metody, již zmíněné třídy instrukcí a argumentů a implementované třídy`Exception.
 
 #### `Interpreter`
@@ -65,17 +66,17 @@ V téhle části se provádí typová kontrola argumentů a instancializace odpo
 private static array $map = [
         'string' => ['pattern' => '/^(?:[^\\\\#\s]|\\\\[0-9]{3})*$/',
 					  'cast' => ConstantArgument::class],
-        'int' => ['pattern' => '/^[-+]?\d+$/', 
+        'int' => ['pattern' => '/^[-+]?\d+$/',
 		          'cast' => ConstantArgument::class],
-        'bool' => ['pattern' => '/^true|false$/', 
+        'bool' => ['pattern' => '/^true|false$/',
 		           'cast' => ConstantArgument::class],
-        'nil' => ['pattern' => '/^nil$/', 
+        'nil' => ['pattern' => '/^nil$/',
 			      'cast' => ConstantArgument::class],
-        'label' => ['pattern' => '/^[\w\-]+$/', 
+        'label' => ['pattern' => '/^[\w\-]+$/',
 			        'cast' => LabelArgument::class],
-        'type' => ['pattern' => '/^int|bool|string|nil$/', 
+        'type' => ['pattern' => '/^int|bool|string|nil$/',
 			       'cast' => TypeArgument::class],
-        'var' => ['pattern' => '/^(GF|TF|LF)@[\w\-]+$/', 
+        'var' => ['pattern' => '/^(GF|TF|LF)@[\w\-]+$/',
 			       'cast' => VariableArgument::class],
     ];
 ```
