@@ -25,25 +25,30 @@ Login: xvsete00
 Při řešení tohoto projektu bylo mým cílem nejen rozšířit ipp-core o funkční implementaci interpretu pro XML reprezentaci jazyka IPPcode24, ale zaměřit se i na její škálovatelnost (přidávání nových instrukcí, či argumentů) a čitelnost.
 
 Proto jsem se při návrhu objektového modelu interpretu rozhodl za použití známých paradigmat jako zapouzdření a dědičnost vytvořit vlastní podtřídu pro každou instrukci:
+
 ![Schéma instrukcí](imgs/InstructionScheme.png)
 
 Stejně jsem postupoval i při návrhu schématu argumentů.
+
 ![Schéma argumentů](imgs/ArgumentScheme.png)
 
-Za konstrukci instancí třídy `Argument` a `Instruction` a jejích podtříd jsou zodpovědné třídy `ArgumentFactory` a `InstructionFactory`. Tyto třídy proces tvorby argumentů a instrukcí unifikují a odpovídají tak návrhovému vzoru `Builder` (podle [1]).
+Za konstrukci instancí třídy `Argument` a `Instruction` a jejích podtříd jsou zodpovědné třídy [`ArgumentFactory`](#argumentfactory) a [`InstructionFactory`](#instructionfactory). Tyto třídy proces tvorby argumentů a instrukcí unifikují a odpovídají tak návrhovému vzoru `Builder` (podle [1](#literatura)).
 
 Samotný běh programu je potom možné rozdělit do dvou částí:
 1. zpracování XML reprezentace kódu a vytvoření seznamu instrukcí
 2. Iterativně procházet instrukce a volání jejich metody `execute`
+
 ![Flow diagram](imgs/FlowDiagram.png)
+
 ## Interní reprezentace
 V téhle části se zaměřím na detailnější popis struktury tříd a jejich vzájemné interakce
 
 ![Diagram tříd](imgs/ClassDiagram.png)
+
 Z diagramu tříd byly pro přehlednost vynechány metody, již zmíněné třídy instrukcí a argumentů a implementované třídy`Exception.
 
 #### `Interpreter`
-`Interpreter` má na starosti odchycení výjimek. Dále vytváří instanci `ServiceLocator` a předává jí služby potřebné při vykonávání instrukcí:
+`Interpreter` má na starosti odchycení výjimek. Dále vytváří instanci [`ServiceLocator`](#servicelocator) a předává jí služby potřebné při vykonávání instrukcí:
 ```php
 $service_locator->register('frame_model', $this->frame_model);
 $service_locator->register('data_stack', $this->data_stack);
@@ -52,13 +57,13 @@ $service_locator->register('stdout', $this->stdout);
 $service_locator->register('stderr', $this->stderr);
 $service_locator->register('stdin', $this->input);
 ```
-Tento objekt potom předává argumentem `XMLparser`. Následně volá metodu:
+Tento objekt potom předává argumentem [`XMLparser`](#xmlparser). Následně volá metodu:
 ```php
 $this->scheduler->run();
 ```
 
 #### `XMLparser`
-Tato třída je zodpovědná za zpracování vstupních dat. K tvorbě argumentů a instrukcí využívá `ArgumentFactory` a `InstructionFactory`. Také má na starosti seřazení pole instrukcí podle `order`, kontrolu duplicitních `order` a kontrolu duplicitních návěští.
+Tato třída je zodpovědná za zpracování vstupních dat. K tvorbě argumentů a instrukcí využívá [`ArgumentFactory`](#argumentfactory) a [`InstructionFactory`](#instructionfactory). Také má na starosti seřazení pole instrukcí podle `order`, kontrolu duplicitních `order` a kontrolu duplicitních návěští.
 
 #### `ArgumentFactory`
 V téhle části se provádí typová kontrola argumentů a instancializace odpovídajících objektů. K ověření hodnoty parametru je k dispozici seznam `$map`, který obsahuje podporované typy argumentů a vhodný regex určený pro validaci.
@@ -82,7 +87,7 @@ private static array $map = [
 ```
 
 #### `InstructionFactory`
-`InstructionFactory` vytváří objekty typu konkrétní podtřídy třídy `Instruction`. Za pomoci seznamu `$map` přiděluje instrukcím potřebné služby ze `ServiceLocator`.
+`InstructionFactory` vytváří objekty typu konkrétní podtřídy třídy `Instruction`. Za pomoci seznamu `$map` přiděluje instrukcím potřebné služby ze [`ServiceLocator`](#servicelocator).
 ```php
 private static array $map = [
         'ADD' => ['class' => ADDInstruction::class, 'services' => ['frame_model']],
@@ -98,16 +103,16 @@ private static array $map = [
 Tato třída je implementována jako zásobník objektů typu `Frame`
 
 #### `FrameModel`
-`FrameModel` odpovídá návrhovému vzoru `Facade`(podle [[#^d8750b]] ). Obsahuje rámce `Frame` pro GF a LF a zásobník rámců `FrameStack` pro LF. Tato třída představuje zapouzdření vnitřní práce s paměťovým model jazyka IPPcode24  a umožňuje instrukcím snadnou práci s proměnnými pouze na základě jejich jména a rámce.
+`FrameModel` odpovídá návrhovému vzoru `Facade`(podle [[#^d8750b]] ). Obsahuje rámce [`Frame`](#frame) pro GF a LF a zásobník rámců [`FrameStack`](#framestack) pro LF. Tato třída představuje zapouzdření vnitřní práce s paměťovým model jazyka IPPcode24  a umožňuje instrukcím snadnou práci s proměnnými pouze na základě jejich jména a rámce.
 
 #### `Variable`
-`Variable` je pomocná třída umožňující ukládání informací do `Frame`.
+`Variable` je pomocná třída umožňující ukládání informací do [`Frame`](#frame).
 
 #### `DataStack`
 `DataStack` představuje datový zásobník.
 
 #### `ServiceLocator`
-Třída obsahující seznam služeb potřebných pro vykonávání instrukcí. Tento objekt je postupně předáván od `Interpreter` přes `XMLParser` až po `InstructionFactory`, kde se konkrétní služby přidělí konstruktoru odpovídající instrukce. Služby jsou typu:
+Třída obsahující seznam služeb potřebných pro vykonávání instrukcí. Tento objekt je postupně předáván od [`Interpreter`](#interpreter) přes [`XMLParser`](#xmlparser) až po [`InstructionFactory`](#instructionfactory), kde se konkrétní služby přidělí konstruktoru odpovídající instrukce. Služby jsou typu:
 - `FrameModel`
 - `DataStack`
 - `Scheduler`
@@ -121,7 +126,7 @@ Třída obsahující seznam služeb potřebných pro vykonávání instrukcí. T
 Tato třída představuje zásobník indexů pole instrukcí.
 
 #### `Scheduler`
-`Scheduler` zajišťuje provádění instrukcí ve správném pořadí. Pomocí `ProgramCounter` vybírá následující instrukci, co se má vykonat, a volá její metodu `execute`. Tato třída zároveň poskytuje instrukcím, které mění běh programu, rozhraní ve formě metod:
+`Scheduler` zajišťuje provádění instrukcí ve správném pořadí. Pomocí [`ProgramCounter`](#programcounter) vybírá následující instrukci, co se má vykonat, a volá její metodu `execute`. Tato třída zároveň poskytuje instrukcím, které mění běh programu, rozhraní ve formě metod:
 - `call(label)`
 - `ret()`
 - `jump(label)`
