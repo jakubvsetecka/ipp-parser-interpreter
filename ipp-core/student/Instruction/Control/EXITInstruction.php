@@ -11,6 +11,7 @@ use IPP\Student\Instruction;
 use IPP\Student\Argument\ConstantArgument;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Exception\OperandValueException;
+use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\FrameModel;
 use IPP\Student\Scheduler;
 
@@ -45,7 +46,7 @@ class EXITInstruction extends Instruction
         }
 
         if (!is_int($value)) {
-            throw new OperandValueException('Return code must be an integer');
+            throw new OperandTypeException('Return code must be an integer');
         }
 
         if ($value < 0 || $value > 9) {

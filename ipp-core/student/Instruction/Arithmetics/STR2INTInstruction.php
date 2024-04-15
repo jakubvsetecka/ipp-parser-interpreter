@@ -10,6 +10,7 @@ namespace IPP\Student\Instruction\Arithmetics;
 use IPP\Student\Instruction;
 use IPP\Student\Argument\VariableArgument;
 use IPP\Student\Argument\ConstantArgument;
+use IPP\Student\Exception\OperandTypeException;
 use IPP\Student\Exception\StringOperationException;
 use IPP\Student\FrameModel;
 
@@ -56,7 +57,19 @@ class STR2INTInstruction extends Instruction
             $index = $variable->getValue();
         }
 
-        if (($result = mb_ord((string)$value, $encoding = 'UTF-8')) == false) {
+        if (!is_string($value)) {
+            throw new OperandTypeException('Argument is not a string');
+        }
+
+        if (!is_int($index)) {
+            throw new OperandTypeException('Argument is not an integer');
+        }
+
+        if ($index < 0 || $index >= mb_strlen($value)) {
+            throw new StringOperationException('Index out of range');
+        }
+
+        if (($result = mb_ord((string)$value[$index], 'UTF-8')) === false) {
             throw new StringOperationException('Invalid character code');
         }
 

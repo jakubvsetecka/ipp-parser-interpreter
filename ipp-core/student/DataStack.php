@@ -12,7 +12,7 @@ namespace IPP\Student;
  */
 class DataStack
 {
-    /** @var int[]|string[]|bool[]|null[] */
+    /** @var mixed[] */
     private array $stack = [];
 
     public function push(int|string|bool|null $value): void

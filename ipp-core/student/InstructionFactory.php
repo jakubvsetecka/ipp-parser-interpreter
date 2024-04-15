@@ -7,6 +7,7 @@
 
 namespace IPP\Student;
 
+use Exception;
 use IPP\Student\Exception\XMLStructureException;
 use IPP\Student\Instruction\Arithmetics\ADDInstruction;
 use IPP\Student\Instruction\Arithmetics\SUBInstruction;
@@ -43,6 +44,7 @@ use IPP\Student\Instruction\DataFrame\PUSHSInstruction;
 use IPP\Student\Instruction\DataFrame\POPSInstruction;
 use IPP\Student\Instruction\MemoryFrame\MOVEInstruction;
 use IPP\Student\Instruction\Control\EXITInstruction;
+use Throwable;
 
 /**
  * Factory for creating instructions.
@@ -66,7 +68,7 @@ class InstructionFactory
         'OR' => ['class' => ORInstruction::class, 'services' => ['frame_model']],
         'NOT' => ['class' => NOTInstruction::class, 'services' => ['frame_model']],
         'INT2CHAR' => ['class' => INT2CHARInstruction::class, 'services' => ['frame_model']],
-        'STR2INT' => ['class' => STR2INTInstruction::class, 'services' => ['frame_model']],
+        'STRI2INT' => ['class' => STR2INTInstruction::class, 'services' => ['frame_model']],
         'READ' => ['class' => READInstruction::class, 'services' => ['frame_model', 'stdin']],
         'WRITE' => ['class' => WRITEInstruction::class, 'services' => ['frame_model', 'stdout']],
         'CONCAT' => ['class' => CONCATInstruction::class, 'services' => ['frame_model']],
@@ -89,7 +91,7 @@ class InstructionFactory
         'RETURN' => ['class' => RETURNInstruction::class, 'services' => ['scheduler']],
         'PUSHS' => ['class' => PUSHSInstruction::class, 'services' => ['data_stack', 'frame_model']],
         'POPS' => ['class' => POPSInstruction::class, 'services' => ['data_stack', 'frame_model']],
-        'EXIT' => ['class' => EXITInstruction::class, 'services' => ['scheduler', 'frame_model']],
+        'EXIT' => ['class' => EXITInstruction::class, 'services' => ['frame_model', 'scheduler']],
     ];
 
     public function __construct(ServiceLocator $serviceLocator)
@@ -120,9 +122,12 @@ class InstructionFactory
             $services[] = $this->serviceLocator->get($serviceType);
         }
 
-
         // Use the ... operator to pass $services as individual arguments
-        $instruction = new $className($order, ...$arguments, ...$services);
+        try {
+            $instruction = new $className($order, ...$arguments, ...$services);
+        } catch (Throwable $e) {  // Catch any Throwable
+            throw new XMLStructureException("Failed to create instruction: $className due to error: " . $e->getMessage());
+        }
 
         assert($instruction instanceof Instruction);
 

@@ -33,6 +33,7 @@ class TYPEInstruction extends Instruction
     public function execute(): void
     {
         $value = null;
+        $defined = true;
 
         if ($this->source instanceof ConstantArgument) {
             $value = $this->source->getValue();
@@ -40,10 +41,36 @@ class TYPEInstruction extends Instruction
             $frame = $this->source->getFrame();
             $name = $this->source->getValue();
             $variable = $this->frameModel->getVariable($frame, (string)$name);
-            $value = $variable->getValue();
+            if ($variable->isDefined()) {
+                $value = $variable->getValue();
+            } else {
+                $defined = false;
+            }
         }
 
-        $result = gettype($value); //TODO: check if this is correct
+        $result = gettype($value);
+
+        if (!$defined) {
+            $result = '';
+        } else {
+            switch ($result) {
+                case 'integer':
+                    $result = 'int';
+                    break;
+                case 'boolean':
+                    $result = 'bool';
+                    break;
+                case 'string':
+                    $result = 'string';
+                    break;
+                case 'NULL':
+                    $result = 'nil';
+                    break;
+                default:
+                    $result = 'unknown';
+                    break;
+            }
+        }
 
         $this->frameModel->setVariable($this->destination->getFrame(), (string)$this->destination->getValue(), $result);
     }

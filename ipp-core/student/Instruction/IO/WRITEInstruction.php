@@ -54,7 +54,7 @@ class WRITEInstruction extends Instruction
                 $this->stdout->writeString($value);
                 break;
             case 'NULL':
-                $this->stdout->writeString('nil');
+                $this->stdout->writeString('');
                 break;
             default:
                 $this->stdout->writeString('');

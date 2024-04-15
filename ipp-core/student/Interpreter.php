@@ -15,28 +15,33 @@ use IPP\Core\AbstractInterpreter;
  */
 class Interpreter extends AbstractInterpreter
 {
+    private ServiceLocator $service_locator;
+    private FrameModel $frame_model;
+    private DataStack $data_stack;
+    private Scheduler $scheduler;
+
     public function execute(): int
     {
         try {
-            $service_locator = new ServiceLocator();
-            $frame_model = new FrameModel();
-            $data_stack = new DataStack();
-            $scheduler = new Scheduler();
+            $this->service_locator = new ServiceLocator();
+            $this->frame_model = new FrameModel();
+            $this->data_stack = new DataStack();
+            $this->scheduler = new Scheduler();
 
-            $service_locator->register('frame_model', $frame_model);
-            $service_locator->register('data_stack', $data_stack);
-            $service_locator->register('scheduler', $scheduler);
-            $service_locator->register('stdout', $this->stdout);
-            $service_locator->register('stderr', $this->stderr);
-            $service_locator->register('stdin', $this->input);
+            $this->service_locator->register('frame_model', $this->frame_model);
+            $this->service_locator->register('data_stack', $this->data_stack);
+            $this->service_locator->register('scheduler', $this->scheduler);
+            $this->service_locator->register('stdout', $this->stdout);
+            $this->service_locator->register('stderr', $this->stderr);
+            $this->service_locator->register('stdin', $this->input);
 
             $dom = $this->source->getDOMDocument();
-            $xml_parser = new XMLParser($dom, $service_locator);
+            $xml_parser = new XMLParser($dom, $this->service_locator);
             $instructions = $xml_parser->run();
 
-            $scheduler->setInstructions($instructions);
+            $this->scheduler->setInstructions($instructions);
 
-            $exit_code = $scheduler->run();
+            $exit_code = $this->scheduler->run();
 
             return $exit_code;
         } catch (Exception $e) {

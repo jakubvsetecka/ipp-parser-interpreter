@@ -60,7 +60,7 @@ class ANDInstruction extends Instruction
             throw new OperandTypeException('Operands must be of the boolean type');
         }
 
-        $result = $value1 & $value2;
+        $result = $value1 && $value2;
 
         $name = $this->destination->getValue();
         $frame = $this->destination->getFrame();

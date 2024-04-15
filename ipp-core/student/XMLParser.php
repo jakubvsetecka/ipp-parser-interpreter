@@ -8,6 +8,7 @@
 namespace IPP\Student;
 
 use DOMDocument;
+use IPP\Student\Exception\SemanticException;
 use IPP\Student\Exception\XMLStructureException;
 use IPP\Student\Instruction\Control\LABELInstruction;
 
@@ -58,6 +59,16 @@ class XMLParser
         if ($root->getAttribute('language') !== 'IPPcode24') {
             throw new XMLStructureException('Invalid language');
         }
+
+        foreach ($root->childNodes as $childNode) {
+            // Check if the node is an element node
+            if ($childNode->nodeType === XML_ELEMENT_NODE) {
+                // Check if the node is either an <instruction> or an <arg> element
+                if ($childNode->tagName !== 'instruction') {
+                    throw new XMLStructureException('Invalid XML structure: Only <instruction> and <arg> elements are allowed directly under <program>');
+                }
+            }
+        }
     }
 
     /**
@@ -72,13 +83,15 @@ class XMLParser
 
         foreach ($instructions as $instruction) {
             // Directly access child nodes by tag name
-            $order = (int)$instruction->getAttribute('order');
             $opcode = $instruction->getAttribute('opcode');
+            $order = (int)$instruction->getAttribute('order');
             $opcode = strtoupper($opcode);
 
             // Initialize an array to hold the argument strings
             $arguments = [];
-            foreach ($instruction->childNodes as $childNode) {
+            $children = $this->getChildren($instruction);
+
+            foreach ($children as $childNode) {
                 // Check if the node is a DOMElement and has textContent
                 if ($childNode instanceof \DOMElement) {
                     $type = $childNode->getAttribute('type');
@@ -96,7 +109,7 @@ class XMLParser
             if ($instruction instanceof LABELInstruction) {
                 $label = $instruction->getLabel();
                 if (in_array($label, $this->labels)) {
-                    throw new XMLStructureException('Label: ' . $label . ' is not unique');
+                    throw new SemanticException('Label: ' . $label . ' is not unique');
                 }
                 $this->labels[] = $label;
             }
@@ -120,5 +133,27 @@ class XMLParser
         });
 
         return $instructions;
+    }
+
+    private function getChildren(\DOMNode $node): array
+    {
+        $children = [];
+        $openNames = ['arg1', 'arg2', 'arg3'];
+        foreach ($node->childNodes as $child) {
+            if ($child->nodeType === XML_ELEMENT_NODE) {
+                if (in_array($child->nodeName, $openNames)) {
+                    $children[] = $child;
+                    $openNames = array_diff($openNames, [$child->nodeName]);
+                } else {
+                    throw new XMLStructureException('Invalid XML structure');
+                }
+            }
+        }
+
+        usort($children, function ($a, $b) {
+            return $a->nodeName <=> $b->nodeName;
+        });
+
+        return $children;
     }
 }

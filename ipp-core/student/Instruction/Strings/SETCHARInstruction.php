@@ -74,11 +74,15 @@ class SETCHARInstruction extends Instruction
             throw new OperandTypeException('Index must be an integer.');
         }
 
+        if (!is_string($symbolValue)) {
+            throw new OperandTypeException('Symbol must be a string');
+        }
+
         if ($indexValue < 0 || $indexValue >= strlen((string)$destinationValue) || strlen((string)$symbolValue) === 0) {
             throw new StringOperationException('Index out of bounds.');
         }
 
-        $destinationValue[$indexValue] = $symbolValue;
+        $destinationValue[$indexValue] = $symbolValue[0];
 
         $this->frameModel->setVariable($this->destination->getFrame(), (string)$this->destination->getValue(), $destinationValue);
     }
