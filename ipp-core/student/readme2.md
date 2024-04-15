@@ -135,4 +135,4 @@ Tato třída představuje zásobník indexů pole instrukcí.
 Implementace odpovídá základnímu zadanání a to v plné formě. Žádná bonusová řešení nebyla implementována.
 ## Literatura
 
-1. Gamma, E., Helm, R., Johnson, R., Vlissides, J.: Design Patterns – Elements of Reusable Object-Oriented Software, Addison Wesley, 1995. ^d8750b
+1. Gamma, E., Helm, R., Johnson, R., Vlissides, J.: Design Patterns – Elements of Reusable Object-Oriented Software, Addison Wesley, 1995.
