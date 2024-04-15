@@ -63,9 +63,11 @@ class XMLParser
         foreach ($root->childNodes as $childNode) {
             // Check if the node is an element node
             if ($childNode->nodeType === XML_ELEMENT_NODE) {
-                // Check if the node is either an <instruction> or an <arg> element
-                if ($childNode->tagName !== 'instruction') {
-                    throw new XMLStructureException('Invalid XML structure: Only <instruction> and <arg> elements are allowed directly under <program>');
+                // Check if the node is an instruction
+                if ($childNode instanceof \DOMElement) {
+                    if ($childNode->tagName !== 'instruction') {
+                        throw new XMLStructureException('Invalid XML structure: Only <instruction> elements are allowed directly under <program>');
+                    }
                 }
             }
         }
@@ -85,6 +87,11 @@ class XMLParser
             // Directly access child nodes by tag name
             $opcode = $instruction->getAttribute('opcode');
             $order = (int)$instruction->getAttribute('order');
+
+            if ($order < 1) {
+                throw new XMLStructureException('Order must be a positive integer');
+            }
+
             $opcode = strtoupper($opcode);
 
             // Initialize an array to hold the argument strings
@@ -135,6 +142,10 @@ class XMLParser
         return $instructions;
     }
 
+    /**
+     * @param \DOMNode $node
+     * @return array<\DOMNode>
+     */
     private function getChildren(\DOMNode $node): array
     {
         $children = [];

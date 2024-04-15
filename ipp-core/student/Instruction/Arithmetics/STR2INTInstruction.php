@@ -69,7 +69,7 @@ class STR2INTInstruction extends Instruction
             throw new StringOperationException('Index out of range');
         }
 
-        if (($result = mb_ord((string)$value[$index], 'UTF-8')) === false) {
+        if (($result = mb_ord((string)$value[$index], 'UTF-8')) == false) {
             throw new StringOperationException('Invalid character code');
         }
 

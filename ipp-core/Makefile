@@ -1,6 +1,6 @@
 ##
 # IPP Project Task 2 Makefile
-# Author: Zbynek Krivka, v2024-02-04
+# Author: Zbynek Krivka, Jakub Všetečka
 #
 
 # Unlike Merlin, dev-container with VSC gives username as "vscode", so change LOGIN to your login explicitly (be aware of no additional spaces)

@@ -64,7 +64,7 @@ class GTInstruction extends Instruction
             throw new OperandTypeException('Operands must be of the same type');
         }
 
-        $result = $value1 > $value2 ? 'true' : 'false';
+        $result = $value1 > $value2;
 
         $name = $this->destination->getValue();
         $frame = $this->destination->getFrame();
